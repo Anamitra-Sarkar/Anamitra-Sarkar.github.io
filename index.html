@@ -3,534 +3,1103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anamitra Sarkar | The Arkoverse</title>
-    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%2338bdf8' d='M50,5A45,45,0,1,1,5,50,45,45,0,0,1,50,5M50,0a50,50,0,1,0,50,50A50,50,0,0,0,50,0Z'/%3E%3Cpath fill='%23e2e8f0' d='M50 25 L69 75 L59 75 L54 62 L46 62 L41 75 L31 75 Z M52 55 L50 50 L48 55 Z'/%3E%3C/svg%3E">
+    <title>Anamitra Sarkar | Full-Stack AI Developer & Content Creator</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0a0a0a;
-            color: #e2e8f0;
+        html { scroll-behavior: smooth; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: radial-gradient(ellipse at center, #000015 0%, #000005 100%);
+            color: #e2e8f0; 
+            overflow-x: hidden; 
+            cursor: none;
         }
-        .gradient-text {
-            background: linear-gradient(to right, #38bdf8, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        
+        /* Custom Cursor */
+        .cursor { 
+            position: fixed; 
+            width: 20px; 
+            height: 20px; 
+            background: radial-gradient(circle, rgba(167,139,250,0.9) 0%, rgba(167,139,250,0.3) 100%); 
+            border-radius: 50%; 
+            pointer-events: none; 
+            z-index: 9999; 
+            mix-blend-mode: screen; 
+            transition: transform 0.1s ease;
+            box-shadow: 0 0 20px rgba(167,139,250,0.5);
         }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
+        .cursor-trail { 
+            position: fixed; 
+            width: 6px; 
+            height: 6px; 
+            background: linear-gradient(45deg, #a78bfa, #00fff9); 
+            border-radius: 50%; 
+            pointer-events: none; 
+            z-index: 9998;
+            box-shadow: 0 0 10px rgba(167,139,250,0.8);
         }
-        .glass-card:hover {
-            border-color: rgba(56, 189, 248, 0.5);
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+        
+        #sandbox-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+        .vignette { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: 1; 
+            box-shadow: inset 0 0 300px 100px rgba(0,0,21,0.7); 
+            pointer-events: none; 
         }
-        .skill-tag {
-            background-color: #1e293b;
-            border: 1px solid #334155;
-            transition: all 0.2s ease;
+        .content-container { position: relative; z-index: 10; width: 100%; }
+        
+        .card-modern { 
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1); 
+            background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03)); 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(25px);
+            transform-style: preserve-3d;
+            position: relative;
+            overflow: hidden;
         }
-        .skill-tag:hover {
-            transform: scale(1.05);
-            background-color: #334155;
-        }
-        .modal-backdrop {
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-        }
-        #particle-canvas {
+        .card-modern::before {
+            content: '';
             position: absolute;
             top: 0;
             left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent, rgba(167,139,250,0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .card-modern:hover::before {
+            opacity: 1;
+        }
+        .card-modern:hover { 
+            transform: translateY(-10px) scale(1.03); 
+            box-shadow: 
+                0 30px 60px -20px rgba(167, 139, 250, 0.3),
+                0 0 30px rgba(167, 139, 250, 0.2);
+            background: linear-gradient(145deg, rgba(167,139,250,0.12), rgba(167,139,250,0.06)); 
+            border-color: rgba(167,139,250,0.4);
+        }
+        
+        .reveal { 
+            opacity: 0; 
+            transform: translateY(60px) scale(0.9); 
+            transition: all 1.2s cubic-bezier(0.23, 1, 0.32, 1); 
+        }
+        .reveal.visible { 
+            opacity: 1; 
+            transform: translateY(0) scale(1); 
+        }
+        
+        .text-glow { 
+            text-shadow: 
+                0 0 20px rgba(167, 139, 250, 0.6), 
+                0 0 40px rgba(167, 139, 250, 0.4); 
+        }
+        
+        .liquid-bg { 
+            background: linear-gradient(-45deg, #000015, #1a0b2e, #0f051a, #000015, #2a1b3d); 
+            background-size: 400% 400%; 
+            animation: liquidFlow 20s ease-in-out infinite; 
+        }
+        @keyframes liquidFlow { 
+            0%, 100% { background-position: 0% 50%; } 
+            25% { background-position: 100% 50%; }
+            50% { background-position: 100% 100%; }
+            75% { background-position: 0% 100%; }
+        }
+        
+        .grid-bg { 
+            background-image: 
+                radial-gradient(circle at 2px 2px, rgba(167,139,250,0.3) 2px, transparent 0),
+                linear-gradient(rgba(167,139,250,0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(167,139,250,0.1) 1px, transparent 1px);
+            background-size: 60px 60px, 60px 60px, 60px 60px; 
+            opacity: 0.1; 
+        }
+        
+        .shine-effect { 
+            position: relative; 
+            overflow: hidden; 
+        }
+        .shine-effect::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: -100%; 
+            width: 100%; 
+            height: 100%; 
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); 
+            animation: shine 4s infinite; 
+            z-index: 1;
+        }
+        @keyframes shine { 
+            0% { left: -100%; } 
+            100% { left: 100%; } 
+        }
+        
+        .magnetic { 
+            transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1); 
+        }
+        
+        #preloader { 
+            z-index: 9999; 
+            font-family: 'Inter', sans-serif; 
+            background: radial-gradient(ellipse at center, #2a1b3d 0%, #000005 100%); 
+        }
+        .loading-circle { 
+            width: 60px; 
+            height: 60px; 
+            border: 3px solid rgba(167,139,250,0.3); 
+            border-top: 3px solid #a78bfa; 
+            border-radius: 50%; 
+            animation: spin 1s linear infinite; 
+            box-shadow: 0 0 30px rgba(167,139,250,0.5);
+        }
+        @keyframes spin { 
+            0% { transform: rotate(0deg); } 
+            100% { transform: rotate(360deg); } 
+        }
+        
+        .modern-btn { 
+            position: relative; 
+            background: linear-gradient(45deg, rgba(167,139,250,0.3), rgba(79,70,229,0.3)); 
+            border: 2px solid rgba(167,139,250,0.5); 
+            backdrop-filter: blur(15px); 
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); 
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(167,139,250,0.2);
+        }
+        .modern-btn::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0; 
+            left: -100%; 
+            width: 100%; 
+            height: 100%; 
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); 
+            transition: left 0.6s ease; 
+        }
+        .modern-btn:hover::before { 
+            left: 100%; 
+        }
+        .modern-btn:hover { 
+            transform: translateY(-2px) scale(1.05); 
+            box-shadow: 
+                0 15px 30px rgba(167,139,250,0.4),
+                0 0 30px rgba(167,139,250,0.6); 
+            border-color: rgba(167,139,250,0.8);
+        }
+        
+        .status-dot {
+            position: relative;
+        }
+        .status-dot::before {
+            content: '';
+            position: absolute;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
         }
-        .typing-cursor {
-            display: inline-block;
-            width: 2px;
-            height: 1em;
-            background-color: #818cf8;
-            animation: blink 0.7s infinite;
+        .status-dot.live::before {
+            background: rgba(34, 197, 94, 0.3);
         }
-        @keyframes blink {
-            50% { opacity: 0; }
+        .status-dot.ai::before {
+            background: rgba(168, 85, 247, 0.3);
         }
-
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .status-dot.web::before {
+            background: rgba(59, 130, 246, 0.3);
         }
-        ::-webkit-scrollbar-track {
-            background: #0a0a0a;
+        .status-dot.data::before {
+            background: rgba(236, 72, 153, 0.3);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #1e293b;
-            border-radius: 10px;
+        .status-dot.python::before {
+            background: rgba(34, 197, 94, 0.3);
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #334155;
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(2); opacity: 0; }
         }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
         }
-        .fade-in {
-            animation: fadeIn 0.8s ease-out forwards;
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .skill-badge {
+            background: linear-gradient(45deg, rgba(167,139,250,0.2), rgba(79,70,229,0.2));
+            border: 1px solid rgba(167,139,250,0.3);
+            backdrop-filter: blur(10px);
         }
     </style>
 </head>
-<body class="antialiased">
-
-    <!-- Background -->
-    <div class="absolute top-0 left-0 w-full h-full -z-10">
-        <canvas id="particle-canvas"></canvas>
-    </div>
-
-    <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 z-50 bg-black/30 backdrop-blur-md">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-xl font-bold tracking-wider gradient-text">ARKOVERSE</a>
-            <nav class="hidden md:flex space-x-8 text-slate-300">
-                <a href="#about" class="hover:text-sky-400 transition-colors">About</a>
-                <a href="#skills" class="hover:text-sky-400 transition-colors">Skills</a>
-                <a href="#projects" class="hover:text-sky-400 transition-colors">Projects</a>
-                <a href="#contact" class="hover:text-sky-400 transition-colors">Contact</a>
-            </nav>
-            <a href="Anamitra Sarkar - Resume.pdf" download class="hidden md:inline-block px-4 py-2 text-sm font-semibold text-white bg-sky-600 rounded-md hover:bg-sky-500 transition-colors">Download Resume</a>
-        </div>
-    </header>
-
-    <main class="container mx-auto px-6 relative z-10">
-
-        <!-- Hero Section -->
-        <section id="home" class="min-h-screen flex flex-col justify-center items-center text-center">
-            <div class="fade-in">
-                <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight">Anamitra Sarkar</h1>
-                <h2 class="mt-4 text-2xl md:text-3xl font-semibold gradient-text">
-                    <span id="typing-text"></span><span class="typing-cursor"></span>
-                </h2>
-                <p class="mt-6 max-w-2xl mx-auto text-lg text-slate-400">
-                    Computer Science Undergraduate building intelligent systems to solve real-world, people-centric challenges.
-                </p>
-                <div class="mt-8 flex justify-center gap-6">
-                    <a href="https://www.linkedin.com/in/anamitra-sarkar-7538b936b/" target="_blank" class="text-slate-400 hover:text-sky-400 transition-colors"><i data-lucide="linkedin" class="w-7 h-7"></i></a>
-                    <a href="https://github.com/Anamitra-Sarkar" target="_blank" class="text-slate-400 hover:text-sky-400 transition-colors"><i data-lucide="github" class="w-7 h-7"></i></a>
-                    <a href="https://huggingface.co/Arko007" target="_blank" class="text-slate-400 hover:text-sky-400 transition-colors">
-                        <svg class="w-7 h-7" role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title>Hugging Face</title><path fill="currentColor" d="M22.0001 15.5515C22.0001 15.5515 20.916 13.081 18.663 13.081C16.4101 13.081 15.326 15.5515 15.326 15.5515C15.326 15.5515 16.4101 18.022 18.663 18.022C20.916 18.022 22.0001 15.5515 22.0001 15.5515ZM8.6741 15.5515C8.6741 15.5515 7.59002 13.081 5.33702 13.081C3.08402 13.081 2.00003 15.5515 2.00003 15.5515C2.00003 15.5515 3.08402 18.022 5.33702 18.022C7.59002 18.022 8.6741 15.5515 8.6741 15.5515ZM19.751 10.232C19.751 10.232 18.043 7.839 16.513 6.44C15.421 5.437 14.542 4.135 14.542 2C14.542 2 14.542 0 12 0C9.45803 0 9.45803 2 9.45803 2C9.45803 4.135 8.57903 5.437 7.48703 6.44C5.95703 7.839 4.24903 10.232 4.24903 10.232C4.24903 10.232 2.16703 10.533 2.16703 12.602C2.16703 14.671 4.24903 14.972 4.24903 14.972C4.24903 14.972 5.01203 20.332 9.45803 22.42C9.45803 22.42 10.372 24 12 24C13.628 24 14.542 22.42 14.542 22.42C18.988 20.332 19.751 14.972 19.751 14.972C19.751 14.972 21.833 14.671 21.833 12.602C21.833 10.533 19.751 10.232 19.751 10.232Z"/></svg>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- About Section -->
-        <section id="about" class="py-24">
-             <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold">About Me</h2>
-                <div class="w-20 h-1 bg-sky-500 mx-auto mt-4 rounded-full"></div>
-            </div>
-            <div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center gap-12">
-                <div class="md:w-1/3">
-                     <img src="https://placehold.co/400x400/0a0a0a/38bdf8?text=Anamitra" alt="Anamitra Sarkar" class="rounded-full border-4 border-sky-500/50 shadow-lg hover:scale-105 transition-transform duration-300">
-                </div>
-                <div class="md:w-2/3 text-lg text-slate-300">
-                    <p>
-                        A motivated Computer Science undergraduate at RCC Institute of Information Technology with a strong foundation in Artificial Intelligence and Machine Learning. I combine proficiency in Python, C, and SQL with hands-on experience in TensorFlow, Scikit-Learn, and NumPy.
-                    </p>
-                    <br>
-                    <p>
-                        My recent internship in Human Resources has ignited a passion for applying technology to solve people-centric challenges. I am actively seeking internship opportunities to contribute to innovative projects in HR Tech, People Analytics, or the broader AI/ML space.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Skills Section -->
-        <section id="skills" class="py-24">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold">Technical Skills</h2>
-                <div class="w-20 h-1 bg-sky-500 mx-auto mt-4 rounded-full"></div>
-            </div>
-            <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Languages -->
-                <div class="glass-card rounded-lg p-6">
-                    <h3 class="text-xl font-bold mb-4 text-sky-400">Languages</h3>
-                    <div class="flex flex-wrap gap-3">
-                        <span class="skill-tag px-3 py-1 rounded-full text-sm">Python</span>
-                        <span class="skill-tag px-3 py-1 rounded-full text-sm">C/C++</span>
-                        <span class="skill-tag px-3 py-1 rounded-full text-sm">SQL</span>
-                        <span class="skill-tag px-3 py-1 rounded-full text-sm">HTML/CSS</span>
-                    </div>
-                </div>
-                <!-- AI/ML -->
-                <div class="glass-card rounded-lg p-6">
-                    <h3 class="text-xl font-bold mb-4 text-sky-400">AI / ML</h3>
-                    <div class="flex flex-wrap gap-3">
-                        <span class="skill-tag px-3 py-1 rounded-full text-sm">TensorFlow</span>
-                        <span class="skill-tag px-3 py-1 rounded-full text-sm">Scikit-Learn</span>
-                        <span class="skill-tag px-3 py-1 rounded-full text-sm">NumPy & Pandas</span>
-                        <span class="skill-tag px-3 py-1 rounded-full text-sm">Google Gemini & Imagen</span>
-                    </div>
-                </div>
-                <!-- Frameworks & Tools -->
-                <div class="glass-card rounded-lg p-6">
-                    <h3 class="text-xl font-bold mb-4 text-sky-400">Frameworks & Tools</h3>
-                    <div class="flex flex-wrap gap-3">
-                        <span class="skill-tag px-3 py-1 rounded-full text-sm">Flask</span>
-                        <span class="skill-tag px-3 py-1 rounded-full text-sm">Tailwind CSS</span>
-                        <span class="skill-tag px-3 py-1 rounded-full text-sm">Git & GitHub</span>
-                        <span class="skill-tag px-3 py-1 rounded-full text-sm">Firebase / Firestore</span>
-                        <span class="skill-tag px-3 py-1 rounded-full text-sm">Hugging Face</span>
-                        <span class="skill-tag px-3 py-1 rounded-full text-sm">REST APIs</span>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Projects Section -->
-        <section id="projects" class="py-24">
-            <div class="text-center mb-12">
-                <h2 class="text-3xl md:text-4xl font-bold">Projects</h2>
-                <div class="w-20 h-1 bg-sky-500 mx-auto mt-4 rounded-full"></div>
-            </div>
-            <!-- Filter Buttons -->
-            <div id="project-filters" class="flex justify-center flex-wrap gap-3 mb-10">
-                <button class="filter-btn active px-4 py-2 text-sm font-semibold rounded-full bg-sky-600 text-white">All</button>
-                <button class="filter-btn px-4 py-2 text-sm font-semibold rounded-full bg-slate-700 text-slate-300 hover:bg-slate-600">AI/ML</button>
-                <button class="filter-btn px-4 py-2 text-sm font-semibold rounded-full bg-slate-700 text-slate-300 hover:bg-slate-600">Full-Stack</button>
-                <button class="filter-btn px-4 py-2 text-sm font-semibold rounded-full bg-slate-700 text-slate-300 hover:bg-slate-600">Automation</button>
-            </div>
-            <div id="project-grid" class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Projects will be dynamically inserted here -->
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact" class="py-24 text-center">
-             <h2 class="text-3xl md:text-4xl font-bold">Get In Touch</h2>
-             <div class="w-20 h-1 bg-sky-500 mx-auto mt-4 rounded-full"></div>
-             <p class="max-w-2xl mx-auto mt-6 text-lg text-slate-300">
-                I'm currently seeking internship opportunities! My inbox is always open. Whether you have a question or just want to say hi, I'll get back to you!
-             </p>
-             <a href="mailto:anamitrasarkar13@gmail.com" class="mt-8 inline-block px-8 py-3 font-semibold text-white bg-sky-600 rounded-lg shadow-lg hover:bg-sky-500 transition-all duration-300 transform hover:scale-105">
-                Say Hello
-             </a>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="border-t border-slate-800">
-        <div class="container mx-auto px-6 py-6 text-center text-slate-400">
-            <p>&copy; 2025 Anamitra Sarkar. Designed with passion.</p>
-        </div>
-    </footer>
-
-    <!-- Project Modal -->
-    <div id="project-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 modal-backdrop">
-        <div id="modal-content" class="glass-card rounded-lg w-full max-w-3xl max-h-[90vh] overflow-y-auto p-8 relative transform transition-all duration-300 scale-95 opacity-0">
-            <button id="close-modal" class="absolute top-4 right-4 text-slate-400 hover:text-white">
-                <i data-lucide="x" class="w-6 h-6"></i>
-            </button>
-            <h3 id="modal-title" class="text-3xl font-bold mb-4 text-sky-400"></h3>
-            <div id="modal-tags" class="flex flex-wrap gap-3 mb-6"></div>
-            <div id="modal-description" class="text-slate-300 space-y-4"></div>
-            <div id="modal-links" class="mt-8 flex gap-4"></div>
+<body class="liquid-bg">
+    <div class="cursor"></div>
+    
+    <div id="preloader" class="fixed inset-0 flex flex-col items-center justify-center transition-opacity duration-1000">
+        <div class="loading-circle mb-6"></div>
+        <div class="text-xl text-violet-300 mb-3 text-glow">Loading Portfolio...</div>
+        <div class="text-sm text-slate-400" id="loading-text">Preparing workspace</div>
+        <div class="mt-6 w-64 h-1 bg-gray-800 rounded-full overflow-hidden">
+            <div id="progress-bar" class="h-full bg-gradient-to-r from-violet-500 to-cyan-500 rounded-full transition-all duration-300" style="width: 0%"></div>
         </div>
     </div>
     
-    <!-- Scroll to Top Button -->
-    <button id="scroll-to-top" class="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full bg-sky-600/80 text-white hidden justify-center items-center backdrop-blur-sm hover:bg-sky-500 transition-all duration-300 transform scale-0">
-        <i data-lucide="arrow-up" class="w-6 h-6"></i>
-    </button>
+    <canvas id="sandbox-canvas"></canvas>
+    <div class="vignette"></div>
+    <div class="grid-bg fixed inset-0 z-0"></div>
 
+    <header class="fixed top-0 left-0 right-0 z-20 p-6 flex justify-between items-center">
+        <h1 class="text-2xl md:text-3xl font-bold tracking-tighter text-white magnetic floating">
+            Anamitra<span class="text-violet-400 text-glow">Sarkar</span>
+        </h1>
+        <nav class="hidden md:flex space-x-8 items-center bg-black/20 backdrop-blur-md px-8 py-4 rounded-full border border-slate-700/50">
+            <a href="#about" class="text-slate-300 hover:text-violet-400 transition-all duration-300 magnetic hover:scale-110 font-medium">About</a>
+            <a href="#services" class="text-slate-300 hover:text-violet-400 transition-all duration-300 magnetic hover:scale-110 font-medium">Services</a>
+            <a href="#projects" class="text-slate-300 hover:text-violet-400 transition-all duration-300 magnetic hover:scale-110 font-medium">Projects</a>
+            <a href="#contact" class="text-slate-300 hover:text-violet-400 transition-all duration-300 magnetic hover:scale-110 font-medium">Contact</a>
+        </nav>
+    </header>
+    
+    <div id="controls" class="fixed bottom-8 left-1/2 -translate-x-1/2 z-20 flex space-x-4">
+        <button id="reset-btn" class="modern-btn font-semibold py-3 px-6 rounded-full text-white text-sm">
+            <i data-lucide="refresh-cw" class="w-4 h-4 inline mr-2"></i>Reset
+        </button>
+        <button id="create-btn" class="modern-btn font-semibold py-3 px-6 rounded-full text-white text-sm">
+            <i data-lucide="sparkles" class="w-4 h-4 inline mr-2"></i>Create Magic
+        </button>
+    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Render Lucide Icons
-            lucide.createIcons();
+    <div class="content-container">
+        <main>
+            <section id="home" class="min-h-screen flex flex-col items-center justify-center text-center relative">
+                <div class="px-4 pt-32 pb-16">
+                    <h2 class="text-5xl md:text-8xl font-black tracking-tighter mb-8 text-white leading-tight text-glow">
+                        Full-Stack AI Developer
+                        <br>
+                        <span class="text-violet-400 shine-effect floating">& Content Creator</span>
+                    </h2>
+                    <p class="max-w-4xl mx-auto text-xl md:text-2xl text-slate-300 mb-12 leading-relaxed">
+                        I build <span class="text-violet-400 font-semibold">intelligent web applications</span>, create <span class="text-violet-400 font-semibold">AI solutions</span>, 
+                        <br>and craft compelling content that drives results for businesses worldwide.
+                        <br><span class="hidden md:inline text-slate-400 text-lg mt-6 block">Available for freelance projects • Let's build something amazing together</span>
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-3 mb-8">
+                        <span class="skill-badge px-4 py-2 rounded-full text-sm font-medium text-violet-300">AI & Machine Learning</span>
+                        <span class="skill-badge px-4 py-2 rounded-full text-sm font-medium text-blue-300">Full-Stack Development</span>
+                        <span class="skill-badge px-4 py-2 rounded-full text-sm font-medium text-green-300">Python Expert</span>
+                        <span class="skill-badge px-4 py-2 rounded-full text-sm font-medium text-pink-300">Content Writing</span>
+                        <span class="skill-badge px-4 py-2 rounded-full text-sm font-medium text-yellow-300">Data Science</span>
+                    </div>
+                </div>
+                <div class="flex-grow"></div>
+                <div class="pb-32">
+                     <a href="#about" class="text-slate-400 font-medium flex flex-col items-center space-y-3 magnetic hover:text-violet-400 transition-all duration-300 text-lg">
+                        <span>Discover My Work</span>
+                        <i data-lucide="chevron-down" class="h-6 w-6 animate-bounce"></i>
+                    </a>
+                </div>
+            </section>
 
-            // --- INTERACTIVE FEATURES ---
-
-            // 1. Particle Background Animation
-            const canvas = document.getElementById('particle-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-
-            let particles = [];
-            const mouse = { x: null, y: null, radius: 100 };
-
-            window.addEventListener('mousemove', (event) => {
-                mouse.x = event.x;
-                mouse.y = event.y;
-            });
-
-            class Particle {
-                constructor(x, y, directionX, directionY, size, color) {
-                    this.x = x; this.y = y; this.directionX = directionX;
-                    this.directionY = directionY; this.size = size; this.color = color;
-                }
-                draw() {
-                    ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-                    ctx.fillStyle = this.color; ctx.fill();
-                }
-                update() {
-                    if (this.x > canvas.width || this.x < 0) this.directionX = -this.directionX;
-                    if (this.y > canvas.height || this.y < 0) this.directionY = -this.directionY;
-                    let dx = mouse.x - this.x; let dy = mouse.y - this.y;
-                    let distance = Math.sqrt(dx * dx + dy * dy);
-                    if (distance < mouse.radius + this.size) {
-                        if (mouse.x < this.x && this.x < canvas.width - this.size * 10) this.x += 5;
-                        if (mouse.x > this.x && this.x > this.size * 10) this.x -= 5;
-                        if (mouse.y < this.y && this.y < canvas.height - this.size * 10) this.y += 5;
-                        if (mouse.y > this.y && this.y > this.size * 10) this.y -= 5;
-                    }
-                    this.x += this.directionX; this.y += this.directionY;
-                    this.draw();
-                }
-            }
-
-            function initParticles() {
-                particles = [];
-                let numberOfParticles = (canvas.height * canvas.width) / 9000;
-                for (let i = 0; i < numberOfParticles; i++) {
-                    let size = (Math.random() * 2) + 1;
-                    let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
-                    let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
-                    let directionX = (Math.random() * .4) - .2;
-                    let directionY = (Math.random() * .4) - .2;
-                    let color = 'rgba(56, 189, 248, 0.3)';
-                    particles.push(new Particle(x, y, directionX, directionY, size, color));
-                }
-            }
-
-            function animateParticles() {
-                requestAnimationFrame(animateParticles);
-                ctx.clearRect(0, 0, innerWidth, innerHeight);
-                for (let i = 0; i < particles.length; i++) particles[i].update();
-            }
-            initParticles(); animateParticles();
-            window.addEventListener('resize', () => {
-                canvas.width = innerWidth; canvas.height = innerHeight;
-                initParticles();
-            });
-
-            // 2. Typing Animation
-            const typingTextElement = document.getElementById('typing-text');
-            const textToType = "AI & Machine Learning Enthusiast";
-            let charIndex = 0;
-            function type() {
-                if (charIndex < textToType.length) {
-                    typingTextElement.textContent += textToType.charAt(charIndex);
-                    charIndex++;
-                    setTimeout(type, 100);
-                }
-            }
-            type();
-
-            // 3. Scroll to Top button
-            const scrollToTopBtn = document.getElementById('scroll-to-top');
-            window.addEventListener('scroll', () => {
-                if(window.scrollY > 300) {
-                    scrollToTopBtn.classList.remove('hidden', 'scale-0');
-                    scrollToTopBtn.classList.add('flex', 'scale-100');
-                } else {
-                    scrollToTopBtn.classList.add('scale-0');
-                     setTimeout(() => {
-                        scrollToTopBtn.classList.add('hidden');
-                        scrollToTopBtn.classList.remove('flex');
-                    }, 300);
-                }
-            });
-            scrollToTopBtn.addEventListener('click', () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-
-
-            // --- PROJECT DATA & LOGIC ---
-
-            const projects = [
-                {
-                    title: "SYNAPSE AI",
-                    category: "AI/ML",
-                    shortDescription: "An AI brainstorming agent to generate novel hackathon ideas, pitches, and team compositions.",
-                    longDescription: "<p>Engineered a sophisticated AI brainstorming agent leveraging Google's Gemini-2.5-Pro and the Tavily Search API. This tool is designed to spark creativity by generating novel hackathon ideas, crafting compelling elevator pitches, and suggesting optimal team compositions based on required skills.</p><p>The project features a full-stack architecture with a Python/Flask backend for core logic, a responsive Tailwind CSS frontend for a seamless user experience, and Firebase Firestore for robust user authentication and cloud data storage.</p>",
-                    tags: ["Gemini-2.5-Pro", "Flask", "Tailwind CSS", "Firebase", "Python"],
-                    github: "https://github.com/Anamitra-Sarkar/SynapseAI",
-                    live: null
-                },
-                {
-                    title: "Astranova AI",
-                    category: "Full-Stack",
-                    shortDescription: "A full-stack, multi-modal conversational AI with chat, image generation, and document creation capabilities.",
-                    longDescription: "<p>Built a comprehensive, multi-modal conversational AI application. Astranova AI integrates multiple powerful models, featuring chat capabilities powered by Gemini, image generation via Imagen, and the ability to create PDF/PPTX documents directly from text prompts.</p><p>A key feature is its dynamic and customizable user interface, which allows for seamless switching between different AI models, providing a versatile and powerful creative suite.</p>",
-                    tags: ["Gemini", "Imagen", "Full-Stack", "Conversational AI", "Python"],
-                    github: "https://github.com/Anamitra-Sarkar/Astranova-AI",
-                    live: null
-                },
-                {
-                    title: "Diabetic Retinopathy Classification",
-                    category: "AI/ML",
-                    shortDescription: "A custom CNN model based on ResNet50 to classify diabetic retinopathy into 5 grades with 98.59% accuracy.",
-                    longDescription: "<p>Designed and trained a custom Convolutional Neural Network (CNN) built upon the robust ResNet50 architecture. The model is trained to classify retinal images into five distinct grades of diabetic retinopathy.</p><p>Achieved a high training accuracy of 98.59% and was subsequently deployed on Hugging Face Spaces, making it publicly accessible for use and demonstration.</p>",
-                    tags: ["TensorFlow", "CNN", "ResNet50", "Hugging Face", "Computer Vision"],
-                    github: null,
-                    live: "https://huggingface.co/AnamitraSarkar/Diabetic-Retinopathy-Detector"
-                },
-                {
-                    title: "Medical Bill Predictor AI",
-                    category: "AI/ML",
-                    shortDescription: "An AI-powered solution to predict medical bills from patient data, combining a ML backend with a simple frontend.",
-                    longDescription: "<p>Developed a practical AI-powered solution to estimate medical expenses based on patient data. This tool uses a machine learning model trained on various patient attributes to predict billing amounts.</p><p>The system combines a machine learning backend built in Python with a user-friendly HTML/CSS frontend, making it easy for users to input data and receive predictions.</p>",
-                    tags: ["Machine Learning", "Python", "Scikit-Learn", "HTML/CSS"],
-                    github: "https://github.com/Anamitra-Sarkar/Medical-Bill-Predictor-AI",
-                    live: null
-                },
-                 {
-                    title: "Python Automation & API Scripts",
-                    category: "Automation",
-                    shortDescription: "A collection of scripts for waste management, file organization, web scraping, and a live weather app.",
-                    longDescription: "<p>A showcase of practical Python scripting skills for automation and data retrieval:</p><ul><li class='mt-2'><strong>Smart Waste Management:</strong> A production-ready dashboard for real-time monitoring and route optimization.</li><li class='mt-2'><strong>File Organizer:</strong> A script that automatically organizes files into categorized subfolders.</li><li class='mt-2'><strong>Multi-Page Web Scraper:</strong> A script to navigate 50+ pages and scrape data for over 1,000 books into a CSV file.</li><li class='mt-2'><strong>Live Weather App:</strong> A CLI tool to fetch and display live weather data from the OpenWeatherMap API.</li></ul>",
-                    tags: ["Python", "Automation", "Web Scraping", "APIs", "CLI"],
-                    github: "https://github.com/Anamitra-Sarkar",
-                    live: null
-                },
-                // --- ADD YOUR NEW PROJECTS HERE ---
-                // Example:
-                // {
-                //     title: "My Awesome New Project",
-                //     category: "Full-Stack", // Categories: AI/ML, Full-Stack, Automation
-                //     shortDescription: "A brief, one-sentence summary of your new project.",
-                //     longDescription: "<p>A more detailed description. You can use HTML tags like p, ul, li, strong.</p>",
-                //     tags: ["React", "Node.js", "MongoDB", "GraphQL"],
-                //     github: "https://github.com/your-repo-link",
-                //     live: "https://your-live-demo-link.com"
-                // },
-            ];
-
-            // Project Filtering & Rendering
-            const projectGrid = document.getElementById('project-grid');
-            const filterBtns = document.querySelectorAll('.filter-btn');
-
-            const renderProjects = (filter = 'All') => {
-                projectGrid.innerHTML = '';
-                const filteredProjects = filter === 'All'
-                    ? projects
-                    : projects.filter(p => p.category === filter);
-
-                if (filteredProjects.length === 0) {
-                    projectGrid.innerHTML = `<p class="text-slate-400 md:col-span-2 lg:col-span-3 text-center">No projects found in this category.</p>`;
-                    return;
-                }
-                
-                filteredProjects.forEach((project, index) => {
-                    const projectCard = document.createElement('div');
-                    // We need the original index to open the correct modal
-                    const originalIndex = projects.findIndex(p => p.title === project.title);
-                    projectCard.className = 'glass-card rounded-lg p-6 flex flex-col hover:border-sky-500/50 transition-all duration-300 transform hover:-translate-y-1 fade-in';
-                    projectCard.innerHTML = `
-                        <h3 class="text-xl font-bold mb-2 text-slate-100">${project.title}</h3>
-                        <p class="text-slate-400 flex-grow">${project.shortDescription}</p>
-                        <button data-index="${originalIndex}" class="open-modal-btn mt-6 text-left font-semibold text-sky-400 hover:text-sky-300 transition-colors">
-                            View Details <span class="ml-1">&rarr;</span>
-                        </button>
-                    `;
-                    projectGrid.appendChild(projectCard);
-                });
-                // Re-add event listeners to new buttons
-                addModalEventListeners();
-            };
-
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    // Update active button style
-                    filterBtns.forEach(b => b.classList.remove('bg-sky-600', 'text-white'));
-                    filterBtns.forEach(b => b.classList.add('bg-slate-700', 'text-slate-300'));
-                    btn.classList.add('bg-sky-600', 'text-white');
-                    btn.classList.remove('bg-slate-700', 'text-slate-300');
-                    
-                    renderProjects(btn.textContent);
-                });
-            });
-
-            // Modal Logic
-            const modal = document.getElementById('project-modal');
-            const modalContent = document.getElementById('modal-content');
-            const closeModalBtn = document.getElementById('close-modal');
+            <section id="about" class="py-32 relative">
+                <div class="container mx-auto px-6">
+                    <div class="text-center mb-20 reveal">
+                        <h2 class="text-5xl md:text-6xl font-bold tracking-tighter text-glow mb-6">About Me</h2>
+                        <p class="text-xl text-slate-400 leading-relaxed max-w-3xl mx-auto">B.Tech AI/ML student passionate about creating intelligent solutions and compelling content</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-16 items-center">
+                        <div class="reveal">
+                            <h3 class="text-3xl font-bold mb-6 text-white">Hi, I'm Anamitra! 👋</h3>
+                            <p class="text-lg text-slate-300 leading-relaxed mb-6">
+                                I'm a 3rd-year B.Tech AI/ML student with a passion for building intelligent web applications and creating content that engages audiences. 
+                                With expertise spanning from machine learning models to full-stack development, I help businesses leverage technology to solve real-world problems.
+                            </p>
+                            <p class="text-lg text-slate-300 leading-relaxed mb-6">
+                                When I'm not coding, you'll find me writing compelling articles, crafting debate pieces, or exploring the latest developments in AI. 
+                                I believe in the power of combining technical expertise with strong communication skills to deliver exceptional results.
+                            </p>
+                            <div class="flex flex-wrap gap-4">
+                                <a href="https://github.com/Anamitra-Sarkar" target="_blank" class="modern-btn px-6 py-3 rounded-full flex items-center text-white">
+                                    <i data-lucide="github" class="w-5 h-5 mr-2"></i>GitHub
+                                </a>
+                                <a href="https://www.linkedin.com/in/anamitra-sarkar-7538b936b" target="_blank" class="modern-btn px-6 py-3 rounded-full flex items-center text-white">
+                                    <i data-lucide="linkedin" class="w-5 h-5 mr-2"></i>LinkedIn
+                                </a>
+                                <a href="https://huggingface.co/Arko007" target="_blank" class="modern-btn px-6 py-3 rounded-full flex items-center text-white">
+                                    <i data-lucide="brain-circuit" class="w-5 h-5 mr-2"></i>HuggingFace
+                                </a>
+                            </div>
+                        </div>
+                        <div class="reveal">
+                            <div class="grid grid-cols-2 gap-6">
+                                <div class="card-modern p-6 rounded-2xl text-center">
+                                    <div class="text-3xl font-bold text-violet-400 mb-2">15+</div>
+                                    <div class="text-sm text-slate-400">Projects Completed</div>
+                                </div>
+                                <div class="card-modern p-6 rounded-2xl text-center">
+                                    <div class="text-3xl font-bold text-blue-400 mb-2">98%</div>
+                                    <div class="text-sm text-slate-400">ML Model Accuracy</div>
+                                </div>
+                                <div class="card-modern p-6 rounded-2xl text-center">
+                                    <div class="text-3xl font-bold text-green-400 mb-2">5+</div>
+                                    <div class="text-sm text-slate-400">Live Applications</div>
+                                </div>
+                                <div class="card-modern p-6 rounded-2xl text-center">
+                                    <div class="text-3xl font-bold text-pink-400 mb-2">100%</div>
+                                    <div class="text-sm text-slate-400">Client Satisfaction</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
             
-            const modalTitle = document.getElementById('modal-title');
-            const modalTags = document.getElementById('modal-tags');
-            const modalDescription = document.getElementById('modal-description');
-            const modalLinks = document.getElementById('modal-links');
+            <section id="services" class="py-32 relative">
+                <div class="container mx-auto px-6">
+                    <div class="text-center mb-20 reveal">
+                        <h2 class="text-5xl md:text-6xl font-bold tracking-tighter text-glow mb-6">My Services</h2>
+                        <p class="text-xl text-slate-400 leading-relaxed">Comprehensive solutions from AI development to content creation</p>
+                    </div>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="reveal card-modern rounded-3xl p-8 shine-effect group" style="transition-delay: 100ms;">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-br from-violet-600 to-purple-700 mb-6 group-hover:scale-110 transition-transform duration-500">
+                                <i data-lucide="brain-circuit" class="text-white h-8 w-8"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-white">AI & Machine Learning</h3>
+                            <p class="text-slate-400 leading-relaxed">Custom AI models, chatbots, computer vision, NLP solutions, and predictive analytics for your business needs.</p>
+                        </div>
+                        <div class="reveal card-modern rounded-3xl p-8 shine-effect group" style="transition-delay: 200ms;">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-br from-blue-600 to-cyan-700 mb-6 group-hover:scale-110 transition-transform duration-500">
+                                <i data-lucide="layers" class="text-white h-8 w-8"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-white">Full-Stack Development</h3>
+                            <p class="text-slate-400 leading-relaxed">Complete web applications using React, Node.js, Python Flask/Django, and modern cloud platforms.</p>
+                        </div>
+                        <div class="reveal card-modern rounded-3xl p-8 shine-effect group" style="transition-delay: 300ms;">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-br from-emerald-600 to-teal-700 mb-6 group-hover:scale-110 transition-transform duration-500">
+                                <i data-lucide="code" class="text-white h-8 w-8"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-white">Frontend Development</h3>
+                            <p class="text-slate-400 leading-relaxed">Responsive, modern websites with React, Vue.js, animations, and mobile-first design principles.</p>
+                        </div>
+                        <div class="reveal card-modern rounded-3xl p-8 shine-effect group" style="transition-delay: 400ms;">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-br from-orange-600 to-red-700 mb-6 group-hover:scale-110 transition-transform duration-500">
+                                <i data-lucide="server" class="text-white h-8 w-8"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-white">Backend Development</h3>
+                            <p class="text-slate-400 leading-relaxed">Robust APIs, databases, cloud deployment, and scalable server architecture using Python and Node.js.</p>
+                        </div>
+                        <div class="reveal card-modern rounded-3xl p-8 shine-effect group" style="transition-delay: 500ms;">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-br from-pink-600 to-rose-700 mb-6 group-hover:scale-110 transition-transform duration-500">
+                                <i data-lucide="bar-chart-3" class="text-white h-8 w-8"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-white">Data Science & Analytics</h3>
+                            <p class="text-slate-400 leading-relaxed">Data analysis, visualization, statistical modeling, and business intelligence solutions using Python and R.</p>
+                        </div>
+                        <div class="reveal card-modern rounded-3xl p-8 shine-effect group" style="transition-delay: 600ms;">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-br from-indigo-600 to-purple-700 mb-6 group-hover:scale-110 transition-transform duration-500">
+                                <i data-lucide="bot" class="text-white h-8 w-8"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-white">Python Automation</h3>
+                            <p class="text-slate-400 leading-relaxed">Web scraping, API integrations, file processing, and workflow automation to boost productivity.</p>
+                        </div>
+                        <div class="reveal card-modern rounded-3xl p-8 shine-effect group" style="transition-delay: 700ms;">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-br from-yellow-600 to-orange-700 mb-6 group-hover:scale-110 transition-transform duration-500">
+                                <i data-lucide="pen-tool" class="text-white h-8 w-8"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-white">Content Writing</h3>
+                            <p class="text-slate-400 leading-relaxed">Technical articles, blog posts, documentation, and compelling copy that engages your audience.</p>
+                        </div>
+                        <div class="reveal card-modern rounded-3xl p-8 shine-effect group" style="transition-delay: 800ms;">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-br from-green-600 to-emerald-700 mb-6 group-hover:scale-110 transition-transform duration-500">
+                                <i data-lucide="message-square" class="text-white h-8 w-8"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-white">Debate & Persuasive Writing</h3>
+                            <p class="text-slate-400 leading-relaxed">Structured arguments, debate pieces, persuasive essays, and compelling presentations that win minds.</p>
+                        </div>
+                        <div class="reveal card-modern rounded-3xl p-8 shine-effect group" style="transition-delay: 900ms;">
+                            <div class="flex items-center justify-center h-16 w-16 rounded-full bg-gradient-to-br from-cyan-600 to-blue-700 mb-6 group-hover:scale-110 transition-transform duration-500">
+                                <i data-lucide="cloud" class="text-white h-8 w-8"></i>
+                            </div>
+                            <h3 class="text-2xl font-bold mb-4 text-white">Cloud & DevOps</h3>
+                            <p class="text-slate-400 leading-relaxed">AWS, Heroku, Vercel deployment, CI/CD pipelines, and cloud infrastructure management.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-            const openModal = (index) => {
-                const project = projects[index];
-                modalTitle.textContent = project.title;
-                modalTags.innerHTML = project.tags.map(tag => `<span class="skill-tag px-3 py-1 rounded-full text-xs">${tag}</span>`).join('');
-                modalDescription.innerHTML = project.longDescription;
-                
-                let linksHTML = '';
-                if (project.github) {
-                    linksHTML += `<a href="${project.github}" target="_blank" class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-slate-700 rounded-md hover:bg-slate-600 transition-colors"><i data-lucide="github" class="w-4 h-4"></i> View on GitHub</a>`;
-                }
-                if (project.live) {
-                    linksHTML += `<a href="${project.live}" target="_blank" class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white bg-sky-600 rounded-md hover:bg-sky-500 transition-colors"><i data-lucide="external-link" class="w-4 h-4"></i> Live Demo</a>`;
-                }
-                modalLinks.innerHTML = linksHTML;
-                lucide.createIcons();
+            <section id="projects" class="py-32 relative">
+                <div class="container mx-auto px-6">
+                    <div class="text-center mb-20 reveal">
+                        <h2 class="text-5xl md:text-6xl font-bold tracking-tighter text-glow mb-6">Featured Projects</h2>
+                        <p class="text-xl text-slate-400 leading-relaxed">Real-world applications that showcase my expertise and impact</p>
+                    </div>
+                     <div class="grid md:grid-cols-2 gap-12">
+                        <div class="reveal card-modern rounded-3xl p-10 group shine-effect">
+                            <div class="flex items-center mb-8">
+                                <div class="h-4 w-4 bg-green-400 rounded-full mr-4 animate-pulse status-dot live"></div>
+                                <span class="text-green-400 font-mono text-sm font-semibold">LIVE • MULTI-MODAL AI</span>
+                            </div>
+                            <h3 class="text-3xl font-bold mb-6 text-white">Astranova AI</h3>
+                            <p class="text-slate-400 mb-8 leading-relaxed">Sophisticated full-stack conversational AI featuring chat, image generation, document creation, voice interaction, and Firebase authentication. Built with Python Flask and modern web technologies.</p>
+                            <div class="flex flex-wrap gap-3 mb-8">
+                                <span class="px-3 py-1 bg-violet-600/20 text-violet-300 text-xs rounded-full">Python Flask</span>
+                                <span class="px-3 py-1 bg-blue-600/20 text-blue-300 text-xs rounded-full">Google Gemini</span>
+                                <span class="px-3 py-1 bg-green-600/20 text-green-300 text-xs rounded-full">Firebase</span>
+                                <span class="px-3 py-1 bg-pink-600/20 text-pink-300 text-xs rounded-full">HTML/CSS/JS</span>
+                            </div>
+                            <div class="flex space-x-6">
+                                <a href="https://replit.com/@anamitrasarslsn/Astranova-AI" target="_blank" class="modern-btn px-6 py-3 rounded-full font-semibold text-violet-400 hover:text-white transition-all duration-300 flex items-center group">
+                                    Live Demo <i data-lucide="external-link" class="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform"></i>
+                                </a>
+                                <a href="https://github.com/Anamitra-Sarkar/Astranova_AI" target="_blank" class="modern-btn px-6 py-3 rounded-full font-semibold text-slate-400 hover:text-white transition-all duration-300 flex items-center group">
+                                    GitHub <i data-lucide="github" class="ml-2 h-4 w-4 group-hover:rotate-12 transition-transform"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="reveal card-modern rounded-3xl p-10 group shine-effect">
+                            <div class="flex items-center mb-8">
+                                <div class="h-4 w-4 bg-green-400 rounded-full mr-4 animate-pulse status-dot live"></div>
+                                <span class="text-green-400 font-mono text-sm font-semibold">LIVE • AI BRAINSTORMING</span>
+                            </div>
+                            <h3 class="text-3xl font-bold mb-6 text-white">SYNAPSE AI</h3>
+                            <p class="text-slate-400 mb-8 leading-relaxed">Advanced AI application that generates unique hackathon ideas based on skills, problem statements, and categories. Features web scraping for inspiration and intelligent team composition suggestions.</p>
+                            <div class="flex flex-wrap gap-3 mb-8">
+                                <span class="px-3 py-1 bg-violet-600/20 text-violet-300 text-xs rounded-full">AI Models</span>
+                                <span class="px-3 py-1 bg-blue-600/20 text-blue-300 text-xs rounded-full">Web Scraping</span>
+                                <span class="px-3 py-1 bg-green-600/20 text-green-300 text-xs rounded-full">HTML/CSS</span>
+                                <span class="px-3 py-1 bg-pink-600/20 text-pink-300 text-xs rounded-full">API Integration</span>
+                            </div>
+                            <div class="flex space-x-6">
+                                <a href="https://synapse-ai-2.onrender.com/" target="_blank" class="modern-btn px-6 py-3 rounded-full font-semibold text-violet-400 hover:text-white transition-all duration-300 flex items-center group">
+                                    Live Demo <i data-lucide="external-link" class="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform"></i>
+                                </a>
+                                <a href="https://github.com/Anamitra-Sarkar/SYNAPSE-AI" target="_blank" class="modern-btn px-6 py-3 rounded-full font-semibold text-slate-400 hover:text-white transition-all duration-300 flex items-center group">
+                                    GitHub <i data-lucide="github" class="ml-2 h-4 w-4 group-hover:rotate-12 transition-transform"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="reveal card-modern rounded-3xl p-10 group shine-effect">
+                            <div class="flex items-center mb-8">
+                                <div class="h-4 w-4 bg-red-400 rounded-full mr-4 animate-pulse status-dot ai"></div>
+                                <span class="text-red-400 font-mono text-sm font-semibold">LIVE • MEDICAL AI</span>
+                            </div>
+                            <h3 class="text-3xl font-bold mb-6 text-white">Med AI</h3>
+                            <p class="text-slate-400 mb-8 leading-relaxed">Comprehensive medical AI platform providing health analytics, symptom analysis, and medical insights powered by advanced machine learning models and deployed on HuggingFace Spaces.</p>
+                            <div class="flex flex-wrap gap-3 mb-8">
+                                <span class="px-3 py-1 bg-red-600/20 text-red-300 text-xs rounded-full">Medical AI</span>
+                                <span class="px-3 py-1 bg-blue-600/20 text-blue-300 text-xs rounded-full">Python</span>
+                                <span class="px-3 py-1 bg-green-600/20 text-green-300 text-xs rounded-full">Streamlit</span>
+                                <span class="px-3 py-1 bg-yellow-600/20 text-yellow-300 text-xs rounded-full">HuggingFace</span>
+                            </div>
+                            <div class="flex space-x-6">
+                                <a href="https://huggingface.co/spaces/Arko007/Med_AI" target="_blank" class="modern-btn px-6 py-3 rounded-full font-semibold text-violet-400 hover:text-white transition-all duration-300 flex items-center group">
+                                    Live Demo <i data-lucide="external-link" class="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform"></i>
+                                </a>
+                                <a href="https://github.com/Anamitra-Sarkar/MedAI" target="_blank" class="modern-btn px-6 py-3 rounded-full font-semibold text-slate-400 hover:text-white transition-all duration-300 flex items-center group">
+                                    GitHub <i data-lucide="github" class="ml-2 h-4 w-4 group-hover:rotate-12 transition-transform"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="reveal card-modern rounded-3xl p-10 group shine-effect">
+                            <div class="flex items-center mb-8">
+                                <div class="h-4 w-4 bg-purple-400 rounded-full mr-4 animate-pulse status-dot ai"></div>
+                                <span class="text-purple-400 font-mono text-sm font-semibold">LIVE • FACT-CHECKING</span>
+                            </div>
+                            <h3 class="text-3xl font-bold mb-6 text-white">Credo AI</h3>
+                            <p class="text-slate-400 mb-8 leading-relaxed">Next-generation platform for combating misinformation with "Two-Brain" AI architecture. Provides immediate high-confidence verdicts and deep nuanced analysis for text and news articles.</p>
+                            <div class="flex flex-wrap gap-3 mb-8">
+                                <span class="px-3 py-1 bg-purple-600/20 text-purple-300 text-xs rounded-full">Fact-Checking AI</span>
+                                <span class="px-3 py-1 bg-blue-600/20 text-blue-300 text-xs rounded-full">Python</span>
+                                <span class="px-3 py-1 bg-green-600/20 text-green-300 text-xs rounded-full">Apache 2.0</span>
+                                <span class="px-3 py-1 bg-orange-600/20 text-orange-300 text-xs rounded-full">NLP</span>
+                            </div>
+                            <div class="flex space-x-6">
+                                <a href="https://huggingface.co/spaces/Arko007/Credo_AI" target="_blank" class="modern-btn px-6 py-3 rounded-full font-semibold text-violet-400 hover:text-white transition-all duration-300 flex items-center group">
+                                    Live Demo <i data-lucide="external-link" class="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform"></i>
+                                </a>
+                                <a href="https://github.com/Anamitra-Sarkar/Credo_AI" target="_blank" class="modern-btn px-6 py-3 rounded-full font-semibold text-slate-400 hover:text-white transition-all duration-300 flex items-center group">
+                                    GitHub <i data-lucide="github" class="ml-2 h-4 w-4 group-hover:rotate-12 transition-transform"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="reveal card-modern rounded-3xl p-10 group shine-effect">
+                            <div class="flex items-center mb-8">
+                                <div class="h-4 w-4 bg-green-400 rounded-full mr-4 animate-pulse status-dot data"></div>
+                                <span class="text-green-400 font-mono text-sm font-semibold">FINANCIAL AI</span>
+                            </div>
+                            <h3 class="text-3xl font-bold mb-6 text-white">Stock AI Predictor</h3>
+                            <p class="text-slate-400 mb-8 leading-relaxed">AI-driven stock market prediction and analysis system using advanced machine learning algorithms to forecast market trends and provide investment insights.</p>
+                            <div class="flex flex-wrap gap-3 mb-8">
+                                <span class="px-3 py-1 bg-green-600/20 text-green-300 text-xs rounded-full">Financial ML</span>
+                                <span class="px-3 py-1 bg-blue-600/20 text-blue-300 text-xs rounded-full">Python</span>
+                                <span class="px-3 py-1 bg-purple-600/20 text-purple-300 text-xs rounded-full">Time Series</span>
+                                <span class="px-3 py-1 bg-yellow-600/20 text-yellow-300 text-xs rounded-full">Data Analysis</span>
+                            </div>
+                            <div class="flex space-x-6">
+                                <a href="https://github.com/Anamitra-Sarkar/stock_ai" target="_blank" class="modern-btn px-6 py-3 rounded-full font-semibold text-slate-400 hover:text-white transition-all duration-300 flex items-center group">
+                                    GitHub <i data-lucide="github" class="ml-2 h-4 w-4 group-hover:rotate-12 transition-transform"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="reveal card-modern rounded-3xl p-10 group shine-effect">
+                            <div class="flex items-center mb-8">
+                                <div class="h-4 w-4 bg-blue-400 rounded-full mr-4 animate-pulse status-dot web"></div>
+                                <span class="text-blue-400 font-mono text-sm font-semibold">IOT • SMART CITY</span>
+                            </div>
+                            <h3 class="text-3xl font-bold mb-6 text-white">Smart Waste Management</h3>
+                            <p class="text-slate-400 mb-8 leading-relaxed">Innovative IoT solution monitoring smart bins across urban areas, tracking fill status, optimizing collection routes, and providing efficient waste management guidance through a comprehensive web interface.</p>
+                            <div class="flex flex-wrap gap-3 mb-8">
+                                <span class="px-3 py-1 bg-blue-600/20 text-blue-300 text-xs rounded-full">JavaScript</span>
+                                <span class="px-3 py-1 bg-green-600/20 text-green-300 text-xs rounded-full">IoT</span>
+                                <span class="px-3 py-1 bg-purple-600/20 text-purple-300 text-xs rounded-full">Smart City</span>
+                                <span class="px-3 py-1 bg-orange-600/20 text-orange-300 text-xs rounded-full">Real-time Data</span>
+                            </div>
+                            <div class="flex space-x-6">
+                                <a href="https://github.com/Anamitra-Sarkar/smart-waste-management" target="_blank" class="modern-btn px-6 py-3 rounded-full font-semibold text-slate-400 hover:text-white transition-all duration-300 flex items-center group">
+                                    GitHub <i data-lucide="github" class="ml-2 h-4 w-4 group-hover:rotate-12 transition-transform"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="reveal card-modern rounded-3xl p-10 group shine-effect">
+                            <div class="flex items-center mb-8">
+                                <div class="h-4 w-4 bg-pink-400 rounded-full mr-4 animate-pulse status-dot data"></div>
+                                <span class="text-pink-400 font-mono text-sm font-semibold">DATA SCIENCE</span>
+                            </div>
+                            <h3 class="text-3xl font-bold mb-6 text-white">Sales Forecasting Portfolio</h3>
+                            <p class="text-slate-400 mb-8 leading-relaxed">Comprehensive time-series forecasting model for predicting e-commerce sales using Python, ARIMA models, and advanced statistical analysis techniques with detailed visualizations.</p>
+                            <div class="flex flex-wrap gap-3 mb-8">
+                                <span class="px-3 py-1 bg-pink-600/20 text-pink-300 text-xs rounded-full">Jupyter Notebook</span>
+                                <span class="px-3 py-1 bg-blue-600/20 text-blue-300 text-xs rounded-full">ARIMA</span>
+                                <span class="px-3 py-1 bg-green-600/20 text-green-300 text-xs rounded-full">Time Series</span>
+                                <span class="px-3 py-1 bg-purple-600/20 text-purple-300 text-xs rounded-full">Python</span>
+                            </div>
+                            <div class="flex space-x-6">
+                                <a href="https://github.com/Anamitra-Sarkar/Sales-Forecasting-Portfolio" target="_blank" class="modern-btn px-6 py-3 rounded-full font-semibold text-slate-400 hover:text-white transition-all duration-300 flex items-center group">
+                                    GitHub <i data-lucide="github" class="ml-2 h-4 w-4 group-hover:rotate-12 transition-transform"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="reveal card-modern rounded-3xl p-10 group shine-effect">
+                            <div class="flex items-center mb-8">
+                                <div class="h-4 w-4 bg-yellow-400 rounded-full mr-4 animate-pulse status-dot python"></div>
+                                <span class="text-yellow-400 font-mono text-sm font-semibold">PYTHON AUTOMATION</span>
+                            </div>
+                            <h3 class="text-3xl font-bold mb-6 text-white">Python Automation Suite</h3>
+                            <p class="text-slate-400 mb-8 leading-relaxed">Collection of Python automation tools including weather app, file organizer, and web scraper for books data. Demonstrates practical automation solutions for daily tasks.</p>
+                            <div class="flex flex-wrap gap-3 mb-8">
+                                <span class="px-3 py-1 bg-yellow-600/20 text-yellow-300 text-xs rounded-full">Python</span>
+                                <span class="px-3 py-1 bg-blue-600/20 text-blue-300 text-xs rounded-full">Web Scraping</span>
+                                <span class="px-3 py-1 bg-green-600/20 text-green-300 text-xs rounded-full">Automation</span>
+                                <span class="px-3 py-1 bg-purple-600/20 text-purple-300 text-xs rounded-full">APIs</span>
+                            </div>
+                            <div class="flex space-x-4">
+                                <a href="https://github.com/Anamitra-Sarkar/python-weather-app" target="_blank" class="modern-btn px-4 py-2 rounded-full font-semibold text-slate-400 hover:text-white transition-all duration-300 flex items-center group text-sm">
+                                    Weather App <i data-lucide="external-link" class="ml-1 h-3 w-3"></i>
+                                </a>
+                                <a href="https://github.com/Anamitra-Sarkar/python-file-organizer" target="_blank" class="modern-btn px-4 py-2 rounded-full font-semibold text-slate-400 hover:text-white transition-all duration-300 flex items-center group text-sm">
+                                    File Organizer <i data-lucide="external-link" class="ml-1 h-3 w-3"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="contact" class="py-40 relative">
+                <div class="container mx-auto px-6 max-w-4xl text-center reveal">
+                    <h2 class="text-5xl md:text-7xl font-bold tracking-tighter text-glow mb-10">Ready to Work Together?</h2>
+                    <p class="text-xl text-slate-300 mb-12 leading-relaxed">I'm available for freelance projects and excited to help bring your ideas to life. Let's create something amazing together!</p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-6 mb-16">
+                        <a href="mailto:anamitrasarkar13@gmail.com" class="modern-btn inline-flex items-center text-white font-bold py-6 px-12 rounded-full text-xl magnetic group">
+                            <i data-lucide="mail" class="w-6 h-6 mr-3 group-hover:rotate-12 transition-transform"></i>
+                            Email Me
+                        </a>
+                        <a href="https://www.linkedin.com/in/anamitra-sarkar-7538b936b" target="_blank" class="modern-btn inline-flex items-center text-white font-bold py-6 px-12 rounded-full text-xl magnetic group">
+                            <i data-lucide="linkedin" class="w-6 h-6 mr-3 group-hover:scale-110 transition-transform"></i>
+                            Connect on LinkedIn
+                        </a>
+                    </div>
+                    <div class="flex justify-center space-x-8">
+                        <a href="https://github.com/Anamitra-Sarkar" target="_blank" class="text-slate-400 hover:text-white transition-colors magnetic">
+                            <i data-lucide="github" class="w-8 h-8"></i>
+                        </a>
+                        <a href="https://huggingface.co/Arko007" target="_blank" class="text-slate-400 hover:text-white transition-colors magnetic">
+                            <i data-lucide="brain-circuit" class="w-8 h-8"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/anamitra-sarkar-7538b936b" target="_blank" class="text-slate-400 hover:text-white transition-colors magnetic">
+                            <i data-lucide="linkedin" class="w-8 h-8"></i>
+                        </a>
+                    </div>
+                    <div class="mt-12 p-6 bg-violet-600/10 border border-violet-600/20 rounded-2xl backdrop-blur-sm">
+                        <p class="text-violet-300 font-medium">💡 Available for:</p>
+                        <p class="text-slate-300 mt-2">AI/ML Projects • Full-Stack Development • Content Writing • Python Automation • Data Science</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    
+    <script>
+    lucide.createIcons();
+    
+    // --- CUSTOM CURSOR SYSTEM ---
+    const cursor = document.querySelector('.cursor');
+    const trails = [];
+    let mouseX = 0, mouseY = 0;
+    
+    // Create cursor trails
+    for(let i = 0; i < 12; i++) {
+        const trail = document.createElement('div');
+        trail.className = 'cursor-trail';
+        document.body.appendChild(trail);
+        trails.push({ element: trail, x: 0, y: 0 });
+    }
+    
+    document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        cursor.style.left = mouseX - 10 + 'px';
+        cursor.style.top = mouseY - 10 + 'px';
+        
+        // Update trails with smooth following
+        trails.forEach((trail, index) => {
+            setTimeout(() => {
+                trail.x += (mouseX - trail.x) * 0.1;
+                trail.y += (mouseY - trail.y) * 0.1;
+                trail.element.style.left = trail.x - 3 + 'px';
+                trail.element.style.top = trail.y - 3 + 'px';
+                trail.element.style.opacity = (12 - index) / 12 * 0.7;
+                trail.element.style.transform = `scale(${(12 - index) / 12})`;
+            }, index * 25);
+        });
+    });
 
-                modal.classList.remove('hidden');
-                modal.classList.add('flex');
+    // --- MAGNETIC EFFECTS ---
+    document.querySelectorAll('.magnetic').forEach(el => {
+        el.addEventListener('mousemove', (e) => {
+            const rect = el.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            const distance = Math.sqrt(x * x + y * y);
+            const maxDistance = Math.max(rect.width, rect.height);
+            const strength = Math.max(0, 1 - distance / maxDistance);
+            
+            el.style.transform = `translate(${x * strength * 0.3}px, ${y * strength * 0.3}px) scale(${1 + strength * 0.05})`;
+        });
+        
+        el.addEventListener('mouseleave', () => {
+            el.style.transform = 'translate(0, 0) scale(1)';
+        });
+    });
+    
+    // --- PRELOADER ---
+    const preloader = document.getElementById('preloader');
+    const progressBar = document.getElementById('progress-bar');
+    const loadingTexts = [
+        'Preparing workspace...',
+        'Loading projects...',
+        'Setting up interactive elements...',
+        'Initializing 3D environment...',
+        'Almost ready...',
+        'Welcome to my portfolio!'
+    ];
+    
+    let textIndex = 0;
+    let progress = 0;
+    
+    const loadingInterval = setInterval(() => {
+        progress += Math.random() * 20 + 10;
+        progressBar.style.width = Math.min(progress, 100) + '%';
+        
+        if(textIndex < loadingTexts.length) {
+            document.getElementById('loading-text').textContent = loadingTexts[textIndex];
+            textIndex++;
+        }
+        
+        if(progress >= 100) {
+            clearInterval(loadingInterval);
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                preloader.style.pointerEvents = 'none';
                 setTimeout(() => {
-                    modalContent.classList.remove('scale-95', 'opacity-0');
-                }, 50);
-            };
+                    preloader.style.display = 'none';
+                }, 1000);
+            }, 800);
+        }
+    }, 500);
 
-            const closeModal = () => {
-                modalContent.classList.add('scale-95', 'opacity-0');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                    modal.classList.remove('flex');
-                }, 300);
-            };
-
-            function addModalEventListeners() {
-                document.querySelectorAll('.open-modal-btn').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        openModal(btn.dataset.index);
-                    });
+    // --- SOUND ENGINE ---
+    const synth = new Tone.PolySynth(Tone.Synth, { 
+        oscillator: { type: 'sine' }, 
+        envelope: { attack: 0.01, decay: 0.3, sustain: 0.2, release: 1.0 }, 
+        volume: -15 
+    }).toDestination();
+    
+    const ambient = new Tone.PluckSynth({
+        volume: -18, 
+        attackNoise: 0.2, 
+        resonance: 0.9,
+        dampening: 2000
+    }).toDestination();
+    
+    function playSound(type, intensity = 1) {
+        if (Tone.context.state !== 'running') Tone.start();
+        try {
+            if (type === 'create') {
+                const notes = ['C4', 'E4', 'G4', 'A4', 'C5'];
+                const note = notes[Math.floor(Math.random() * notes.length)];
+                synth.triggerAttackRelease(note, '8n', undefined, 0.3 * intensity);
+            }
+            if (type === 'magic') {
+                const chord = ['C4', 'E4', 'G4'];
+                chord.forEach((note, i) => {
+                    setTimeout(() => synth.triggerAttackRelease(note, '8n', undefined, 0.2), i * 50);
                 });
             }
+            if (type === 'reset') {
+                ambient.triggerAttack('C2');
+                setTimeout(() => ambient.triggerAttack('G2'), 200);
+            }
+        } catch (e) { console.error("Sound error:", e); }
+    }
 
-            closeModalBtn.addEventListener('click', closeModal);
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    closeModal();
-                }
+    // --- 3D INTERACTIVE SANDBOX ---
+    let scene, camera, renderer, core, particles = [];
+    let mouseVector = new THREE.Vector2(), isMousePressed = false;
+    let cameraRotationX = 0, cameraRotationY = 0, targetRotationX = 0, targetRotationY = 0;
+    
+    class InteractiveParticle {
+        constructor(position) {
+            this.position = position.clone();
+            this.velocity = new THREE.Vector3(
+                (Math.random() - 0.5) * 3,
+                (Math.random() - 0.5) * 3,
+                (Math.random() - 0.5) * 3
+            );
+            this.life = 1.0;
+            this.size = Math.random() * 8 + 2;
+            this.hue = Math.random() * 0.3 + 0.6;
+            this.color = new THREE.Color().setHSL(this.hue, 1, 0.6 + Math.random() * 0.4);
+            
+            const geometry = new THREE.SphereGeometry(this.size, 8, 8);
+            const material = new THREE.MeshBasicMaterial({ 
+                color: this.color, 
+                transparent: true, 
+                opacity: 0.8 
             });
+            this.mesh = new THREE.Mesh(geometry, material);
+            this.mesh.position.copy(this.position);
+            scene.add(this.mesh);
+        }
+        
+        update() {
+            // Attraction to core
+            const attraction = new THREE.Vector3().subVectors(core.position, this.position);
+            attraction.normalize().multiplyScalar(0.02);
+            this.velocity.add(attraction);
+            
+            // Add some randomness
+            this.velocity.add(new THREE.Vector3(
+                (Math.random() - 0.5) * 0.1,
+                (Math.random() - 0.5) * 0.1,
+                (Math.random() - 0.5) * 0.1
+            ));
+            
+            this.position.add(this.velocity);
+            this.mesh.position.copy(this.position);
+            
+            this.life -= 0.005;
+            this.mesh.material.opacity = this.life;
+            this.mesh.scale.setScalar(this.life);
+            
+            return this.life > 0;
+        }
+        
+        destroy() {
+            scene.remove(this.mesh);
+            this.mesh.geometry.dispose();
+            this.mesh.material.dispose();
+        }
+    }
 
-            // Initial render
-            renderProjects();
+    function initSandbox() {
+        const canvas = document.getElementById('sandbox-canvas');
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+        camera.position.z = 1000;
+        
+        renderer = new THREE.WebGLRenderer({ 
+            canvas: canvas, 
+            antialias: true, 
+            alpha: true
+        });
+        renderer.setSize(window.innerWidth, window.innerHeight);
 
-            // Animate on scroll
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('fade-in');
-                    }
-                });
-            }, { threshold: 0.1 });
+        // Central core
+        const coreGeom = new THREE.IcosahedronGeometry(100, 1);
+        const coreMaterial = new THREE.ShaderMaterial({
+            uniforms: {
+                time: { value: 0 },
+                intensity: { value: 1.0 }
+            },
+            vertexShader: `
+                uniform float time;
+                varying vec3 vPosition;
+                varying vec3 vNormal;
+                void main() {
+                    vPosition = position;
+                    vNormal = normal;
+                    vec3 pos = position;
+                    pos += normal * sin(time * 2.0 + position.x * 0.01) * 8.0;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+                }
+            `,
+            fragmentShader: `
+                uniform float time;
+                uniform float intensity;
+                varying vec3 vPosition;
+                varying vec3 vNormal;
+                void main() {
+                    float pulse = sin(time * 3.0) * 0.5 + 0.5;
+                    vec3 color = mix(vec3(0.4, 0.2, 0.8), vec3(0.8, 0.4, 1.0), pulse);
+                    float fresnel = pow(1.0 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
+                    gl_FragColor = vec4(color + fresnel * 0.3, 0.9);
+                }
+            `,
+            transparent: true
+        });
+        
+        core = new THREE.Mesh(coreGeom, coreMaterial);
+        scene.add(core);
+        
+        // Wireframe shell
+        const shellGeom = new THREE.IcosahedronGeometry(120, 1);
+        const shellMat = new THREE.MeshBasicMaterial({ 
+            color: 0x00fff9, 
+            wireframe: true, 
+            transparent: true, 
+            opacity: 0.2 
+        });
+        const shell = new THREE.Mesh(shellGeom, shellMat);
+        core.add(shell);
+        
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+        scene.add(ambientLight);
+        
+        const light1 = new THREE.PointLight(0xa78bfa, 2, 2000);
+        light1.position.set(500, 500, 500);
+        scene.add(light1);
+        
+        const light2 = new THREE.PointLight(0x00fff9, 2, 2000);
+        light2.position.set(-500, -500, -500);
+        scene.add(light2);
 
-            document.querySelectorAll('section > div:not(.fade-in)').forEach(el => {
-                observer.observe(el);
+        // Events
+        window.addEventListener('resize', onResize);
+        document.addEventListener('mousedown', onMouseDown);
+        document.addEventListener('mouseup', onMouseUp);
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('click', createParticle);
+    }
+    
+    function createParticle(event) {
+        mouseVector.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouseVector.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        
+        const vector = new THREE.Vector3(mouseVector.x, mouseVector.y, 0.5);
+        vector.unproject(camera);
+        const direction = vector.sub(camera.position).normalize();
+        const distance = -camera.position.z / direction.z;
+        const worldPosition = camera.position.clone().add(direction.multiplyScalar(distance * 0.8));
+        
+        // Create particle cluster
+        for(let i = 0; i < 5; i++) {
+            const particlePosition = worldPosition.clone().add(new THREE.Vector3(
+                (Math.random() - 0.5) * 100,
+                (Math.random() - 0.5) * 100,
+                (Math.random() - 0.5) * 100
+            ));
+            particles.push(new InteractiveParticle(particlePosition));
+        }
+        
+        playSound('create', Math.min(particles.length / 20, 1));
+    }
+    
+    function createMagicBurst() {
+        for(let i = 0; i < 25; i++) {
+            const burstPosition = new THREE.Vector3(
+                (Math.random() - 0.5) * 400,
+                (Math.random() - 0.5) * 400,
+                (Math.random() - 0.5) * 400
+            );
+            particles.push(new InteractiveParticle(burstPosition));
+        }
+        playSound('magic');
+    }
+    
+    function onMouseDown(e) { 
+        isMousePressed = true; 
+    }
+    
+    function onMouseUp() { 
+        isMousePressed = false; 
+    }
+    
+    function onMouseMove(e) {
+        if(isMousePressed) {
+            const deltaX = e.movementX * 0.005;
+            const deltaY = e.movementY * 0.005;
+            targetRotationY += deltaX;
+            targetRotationX += deltaY;
+        }
+    }
+
+    function onResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+
+    let time = 0;
+    function animate() {
+        requestAnimationFrame(animate);
+        time += 0.016;
+        
+        // Update core
+        if(core.material.uniforms) {
+            core.material.uniforms.time.value = time;
+            core.material.uniforms.intensity.value = 1 + Math.sin(time * 0.5) * 0.3;
+        }
+        
+        // Smooth camera rotation
+        cameraRotationY += (targetRotationY - cameraRotationY) * 0.03;
+        cameraRotationX += (targetRotationX - cameraRotationX) * 0.03;
+        cameraRotationX = Math.max(-Math.PI/4, Math.min(Math.PI/4, cameraRotationX));
+        
+        scene.rotation.y = cameraRotationY;
+        scene.rotation.x = cameraRotationX;
+        
+        // Auto rotation
+        targetRotationY += 0.001;
+        
+        // Core rotation
+        core.rotation.x += 0.002;
+        core.rotation.y += 0.003;
+        
+        // Update particles
+        particles = particles.filter(particle => {
+            if (!particle.update()) {
+                particle.destroy();
+                return false;
+            }
+            return true;
+        });
+        
+        // Add ambient particles occasionally
+        if (Math.random() < 0.02 && particles.length < 150) {
+            const ambientPosition = new THREE.Vector3(
+                (Math.random() - 0.5) * 800,
+                (Math.random() - 0.5) * 800,
+                (Math.random() - 0.5) * 800
+            );
+            particles.push(new InteractiveParticle(ambientPosition));
+        }
+        
+        renderer.render(scene, camera);
+    }
+    
+    // Control buttons
+    document.getElementById('reset-btn').addEventListener('click', () => {
+        particles.forEach(particle => particle.destroy());
+        particles = [];
+        targetRotationX = 0;
+        targetRotationY = 0;
+        playSound('reset');
+    });
+    
+    document.getElementById('create-btn').addEventListener('click', () => {
+        createMagicBurst();
+    });
+    
+    // Initialize
+    initSandbox();
+    animate();
+
+    // --- SCROLL REVEALS ---
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => { 
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                setTimeout(() => playSound('create', 0.3), Math.random() * 500);
+            }
+        });
+    }, { threshold: 0.1 });
+    revealElements.forEach(el => revealObserver.observe(el));
+    
+    // --- CURSOR INTERACTIONS ---
+    document.addEventListener('mouseenter', () => {
+        cursor.style.opacity = '1';
+    });
+    
+    document.addEventListener('mouseleave', () => {
+        cursor.style.opacity = '0';
+    });
+    
+    // Enhanced cursor on interactive elements
+    document.querySelectorAll('.card-modern, .modern-btn').forEach(el => {
+        el.addEventListener('mouseenter', () => {
+            cursor.style.transform = 'scale(2)';
+            cursor.style.background = 'radial-gradient(circle, rgba(167,139,250,1) 0%, rgba(167,139,250,0.5) 100%)';
+        });
+        
+        el.addEventListener('mouseleave', () => {
+            cursor.style.transform = 'scale(1)';
+            cursor.style.background = 'radial-gradient(circle, rgba(167,139,250,0.9) 0%, rgba(167,139,250,0.3) 100%)';
+        });
+    });
+    
+    // Button click feedback
+    document.querySelectorAll('.modern-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            gsap.to(btn, {
+                scale: 0.95,
+                duration: 0.1,
+                yoyo: true,
+                repeat: 1,
+                ease: "power2.inOut"
             });
         });
+    });
+    
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+    
+    console.log("🚀 Anamitra's Portfolio loaded! Ready for amazing collaborations.");
     </script>
 </body>
 </html>
