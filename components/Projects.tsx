@@ -4,65 +4,105 @@ import { PROJECTS } from '../constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, X, ExternalLink, Github, Code2, Layers } from 'lucide-react';
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2,
+    },
+  },
+};
+
+const titleVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: 'easeOut' },
+  },
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: 'easeOut' },
+  },
+};
+
 export const Projects: React.FC = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selectedProject = PROJECTS.find(p => p.id === selectedId);
 
   return (
     <Section id="projects">
-      <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-        <div>
-           <h2 className="font-display font-extrabold text-4xl md:text-5xl text-zinc-900 dark:text-stone-100 mb-4">
-            Selected Work
-          </h2>
-          <p className="text-zinc-500 dark:text-stone-400 text-lg max-w-xl">
-             A collection of high-impact projects where design meets deep tech. Click on any card to dive into the case study.
-          </p>
-        </div>
-      </div>
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
+        variants={containerVariants}
+      >
+        <motion.div variants={titleVariants} className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+          <div>
+            <h2 className="font-display font-extrabold text-4xl md:text-5xl text-zinc-900 dark:text-stone-100 mb-4">
+              Selected Work
+            </h2>
+            <p className="text-zinc-500 dark:text-stone-400 text-lg max-w-xl">
+              A collection of high-impact projects where design meets deep tech. Click on any card to dive into the case study.
+            </p>
+          </div>
+        </motion.div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {PROJECTS.map((project) => (
-          <motion.div
-            layoutId={`card-${project.id}`}
-            key={project.id}
-            onClick={() => setSelectedId(project.id)}
-            className="group relative bg-white dark:bg-stone-900 rounded-3xl p-8 border border-zinc-200 dark:border-stone-800 cursor-pointer overflow-hidden hover:shadow-2xl hover:shadow-zinc-200/50 dark:hover:shadow-black/40 transition-shadow flex flex-col justify-between min-h-[320px]"
-          >
-            <div>
-                <motion.div layoutId={`type-${project.id}`} className="mb-4 flex justify-between items-start">
-                    <span className={`inline-block px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide bg-${project.color}-100 dark:bg-${project.color}-900/30 text-${project.color}-600 dark:text-${project.color}-400`}>
-                        {project.type}
-                    </span>
-                    <div className="bg-zinc-100 dark:bg-stone-800 text-zinc-400 dark:text-stone-500 group-hover:bg-zinc-900 dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-stone-900 p-2 rounded-full transition-colors">
-                        <Plus className="w-4 h-4" />
-                    </div>
-                </motion.div>
-                
-                <motion.h3 layoutId={`title-${project.id}`} className="font-display font-bold text-2xl text-zinc-900 dark:text-stone-200 mb-3 leading-tight">
-                    {project.title}
-                </motion.h3>
-                
-                <motion.p layoutId={`desc-${project.id}`} className="text-zinc-500 dark:text-stone-400 font-medium text-base leading-relaxed mb-6">
-                    {project.shortDescription}
-                </motion.p>
-            </div>
+        <motion.div 
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          variants={containerVariants}
+        >
+          {PROJECTS.map((project) => (
+            <motion.div
+              layoutId={`card-${project.id}`}
+              key={project.id}
+              onClick={() => setSelectedId(project.id)}
+              variants={cardVariants}
+              className="group relative bg-white dark:bg-stone-900 rounded-3xl p-8 border border-zinc-200 dark:border-stone-800 cursor-pointer overflow-hidden hover:shadow-2xl hover:shadow-zinc-200/50 dark:hover:shadow-black/40 transition-shadow flex flex-col justify-between min-h-[320px]"
+            >
+              <div>
+                  <motion.div layoutId={`type-${project.id}`} className="mb-4 flex justify-between items-start">
+                      <span className={`inline-block px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide bg-${project.color}-100 dark:bg-${project.color}-900/30 text-${project.color}-600 dark:text-${project.color}-400`}>
+                          {project.type}
+                      </span>
+                      <div className="bg-zinc-100 dark:bg-stone-800 text-zinc-400 dark:text-stone-500 group-hover:bg-zinc-900 dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-stone-900 p-2 rounded-full transition-colors">
+                          <Plus className="w-4 h-4" />
+                      </div>
+                  </motion.div>
+                  
+                  <motion.h3 layoutId={`title-${project.id}`} className="font-display font-bold text-2xl text-zinc-900 dark:text-stone-200 mb-3 leading-tight">
+                      {project.title}
+                  </motion.h3>
+                  
+                  <motion.p layoutId={`desc-${project.id}`} className="text-zinc-500 dark:text-stone-400 font-medium text-base leading-relaxed mb-6">
+                      {project.shortDescription}
+                  </motion.p>
+              </div>
 
-            <div className="space-y-3">
-                <div className="flex flex-wrap gap-2">
-                    {project.techStack.slice(0, 3).map((tech, i) => (
-                        <span key={i} className="text-xs font-semibold text-zinc-500 dark:text-stone-400 bg-zinc-50 dark:bg-stone-800 px-2 py-1 rounded-md border border-zinc-100 dark:border-stone-700">
-                            {tech}
-                        </span>
-                    ))}
-                    {project.techStack.length > 3 && (
-                        <span className="text-xs font-semibold text-zinc-400 dark:text-stone-500 bg-zinc-50 dark:bg-stone-800 px-2 py-1 rounded-md border border-zinc-100 dark:border-stone-700">+{project.techStack.length - 3}</span>
-                    )}
-                </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+              <div className="space-y-3">
+                  <div className="flex flex-wrap gap-2">
+                      {project.techStack.slice(0, 3).map((tech, i) => (
+                          <span key={i} className="text-xs font-semibold text-zinc-500 dark:text-stone-400 bg-zinc-50 dark:bg-stone-800 px-2 py-1 rounded-md border border-zinc-100 dark:border-stone-700">
+                              {tech}
+                          </span>
+                      ))}
+                      {project.techStack.length > 3 && (
+                          <span className="text-xs font-semibold text-zinc-400 dark:text-stone-500 bg-zinc-50 dark:bg-stone-800 px-2 py-1 rounded-md border border-zinc-100 dark:border-stone-700">+{project.techStack.length - 3}</span>
+                      )}
+                  </div>
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </motion.div>
 
       <AnimatePresence>
         {selectedId && selectedProject && (

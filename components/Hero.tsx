@@ -3,6 +3,28 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { PERSONAL_INFO, HERO_VARIANTS } from '../constants';
 import { ArrowDown, Github, Linkedin, BrainCircuit } from 'lucide-react';
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+      duration: 0.5,
+      ease: 'easeOut'
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: 'easeOut' },
+  },
+};
+
+
 export const Hero: React.FC = () => {
   const [index, setIndex] = useState(0);
 
@@ -21,7 +43,13 @@ export const Hero: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen flex flex-col justify-center px-6 pt-20 overflow-hidden z-10">
+    <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.1 }}
+        variants={containerVariants}
+        className="relative min-h-screen flex flex-col justify-center px-6 pt-20 overflow-hidden z-10"
+    >
       
       {/* Playful Background Elements */}
       <motion.div 
@@ -38,18 +66,15 @@ export const Hero: React.FC = () => {
       <div className="absolute bottom-1/4 left-1/3 w-6 h-6 bg-orange-400 rounded-md rotate-12" />
 
       <div className="max-w-7xl mx-auto w-full z-10">
-        <div className="max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+        <motion.div variants={itemVariants} className="max-w-4xl">
+          <div
             className="flex items-center gap-3 mb-6"
           >
             <span className="px-4 py-1.5 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 font-bold text-sm tracking-wide">
               HELLO WORLD
             </span>
             <span className="h-px w-20 bg-orange-200 dark:bg-orange-800/50"></span>
-          </motion.div>
+          </div>
 
           {/* Cycling Headline */}
           <div className="h-48 md:h-40 mb-6 relative">
@@ -77,10 +102,7 @@ export const Hero: React.FC = () => {
              Hi, I'm <strong className="text-zinc-900 dark:text-stone-200">{PERSONAL_INFO.name}</strong>. {HERO_VARIANTS[index].subline}
           </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
+          <div
             className="flex flex-col sm:flex-row gap-5 items-start sm:items-center"
           >
             <button 
@@ -95,20 +117,18 @@ export const Hero: React.FC = () => {
                <SocialLink href={PERSONAL_INFO.linkedin} icon={Linkedin} />
                <SocialLink href={PERSONAL_INFO.huggingface} icon={BrainCircuit} />
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
       
       <motion.div 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 1 }}
+        variants={itemVariants}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-zinc-400 dark:text-stone-600"
       >
         <span className="text-xs font-bold tracking-widest uppercase">Scroll</span>
         <ArrowDown className="w-4 h-4 animate-bounce" />
       </motion.div>
-    </div>
+    </motion.div>
   );
 };
 
