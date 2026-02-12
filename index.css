@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px; /* Ensures section titles aren't hidden behind navbar */
+  }
+  body {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    /* Default light mode bg, dark mode handled via tailwind class */
+    
+    overflow-x: hidden;
+  }
+  /* The new cursor script handles hiding the default cursor now
+  @media (hover: hover) and (pointer: fine) {
+    body {
+        cursor: none;
+    }
+  } */
+  #root {
+    width: 100%;
+    min-height: 100vh;
+  }
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+      display: none;
+  }
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+  }
+  
+  ::selection {
+    background-color: #F97316;
+    color: white;
+  }
+  
+  .dark ::selection {
+    background-color: #fb923c; /* Orange-400 */
+    color: #0c0a09;
+  }
