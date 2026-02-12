@@ -15,11 +15,11 @@ import { ThemeProvider } from './context/ThemeContext';
 function App() {
   return (
     <ThemeProvider>
-      <div className="antialiased selection:bg-orange-100 selection:text-orange-900 dark:selection:bg-orange-900 dark:selection:text-orange-100 relative transition-colors duration-500">
+      <div className="w-full min-h-screen antialiased selection:bg-orange-100 selection:text-orange-900 dark:selection:bg-orange-900 dark:selection:text-orange-100 relative transition-colors duration-500">
         <AmbientBackground />
         
         {/* Content Wrapper to sit above the fixed background */}
-        <div className="relative z-10 flex flex-col">
+        <div className="relative z-10 w-full flex flex-col">
           <Navbar />
           <div id="top">
             <Hero />
