@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { PERSONAL_INFO, HERO_VARIANTS } from '../constants';
 import { ArrowDown, Github, Linkedin, BrainCircuit } from 'lucide-react';
+import { Selectable } from './ui/Selectable';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -87,20 +88,21 @@ export const Hero: React.FC = () => {
                 transition={{ duration: 0.5 }}
                 className="font-display font-extrabold text-5xl md:text-7xl lg:text-8xl text-zinc-900 dark:text-stone-100 leading-[0.95] tracking-tight absolute top-0 left-0"
               >
-                {HERO_VARIANTS[index].headline}
+                <Selectable>{HERO_VARIANTS[index].headline}</Selectable>
               </motion.h1>
             </AnimatePresence>
           </div>
-
-          <motion.p
-            key={`sub-${index}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="text-lg md:text-2xl text-zinc-600 dark:text-stone-400 max-w-2xl leading-relaxed mb-10 font-medium"
-          >
-             Hi, I'm <strong className="text-zinc-900 dark:text-stone-200">{PERSONAL_INFO.name}</strong>. {HERO_VARIANTS[index].subline}
-          </motion.p>
+          <Selectable>
+            <motion.p
+              key={`sub-${index}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="text-lg md:text-2xl text-zinc-600 dark:text-stone-400 max-w-2xl leading-relaxed mb-10 font-medium"
+            >
+              Hi, I'm <strong className="text-zinc-900 dark:text-stone-200">{PERSONAL_INFO.name}</strong>. {HERO_VARIANTS[index].subline}
+            </motion.p>
+          </Selectable>
 
           <div
             className="flex flex-col sm:flex-row gap-5 items-start sm:items-center"

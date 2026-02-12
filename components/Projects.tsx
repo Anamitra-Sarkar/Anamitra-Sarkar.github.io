@@ -3,6 +3,7 @@ import { Section } from './ui/Section';
 import { PROJECTS } from '../constants';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, X, ExternalLink, Github, Code2, Layers } from 'lucide-react';
+import { ProximityAware } from './ui/ProximityAware';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -61,45 +62,46 @@ export const Projects: React.FC = () => {
           variants={containerVariants}
         >
           {PROJECTS.map((project) => (
-            <motion.div
-              layoutId={`card-${project.id}`}
-              key={project.id}
-              onClick={() => setSelectedId(project.id)}
-              variants={cardVariants}
-              className="group relative bg-white dark:bg-stone-900 rounded-3xl p-8 border border-zinc-200 dark:border-stone-800 cursor-pointer overflow-hidden hover:shadow-2xl hover:shadow-zinc-200/50 dark:hover:shadow-black/40 transition-shadow flex flex-col justify-between min-h-[320px]"
-            >
-              <div>
-                  <motion.div layoutId={`type-${project.id}`} className="mb-4 flex justify-between items-start">
-                      <span className={`inline-block px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide bg-${project.color}-100 dark:bg-${project.color}-900/30 text-${project.color}-600 dark:text-${project.color}-400`}>
-                          {project.type}
-                      </span>
-                      <div className="bg-zinc-100 dark:bg-stone-800 text-zinc-400 dark:text-stone-500 group-hover:bg-zinc-900 dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-stone-900 p-2 rounded-full transition-colors">
-                          <Plus className="w-4 h-4" />
-                      </div>
-                  </motion.div>
-                  
-                  <motion.h3 layoutId={`title-${project.id}`} className="font-display font-bold text-2xl text-zinc-900 dark:text-stone-200 mb-3 leading-tight">
-                      {project.title}
-                  </motion.h3>
-                  
-                  <motion.p layoutId={`desc-${project.id}`} className="text-zinc-500 dark:text-stone-400 font-medium text-base leading-relaxed mb-6">
-                      {project.shortDescription}
-                  </motion.p>
-              </div>
+            <ProximityAware key={project.id}>
+              <motion.div
+                layoutId={`card-${project.id}`}
+                onClick={() => setSelectedId(project.id)}
+                variants={cardVariants}
+                className="group relative bg-white dark:bg-stone-900 rounded-3xl p-8 border border-zinc-200 dark:border-stone-800 cursor-pointer overflow-hidden hover:shadow-2xl hover:shadow-zinc-200/50 dark:hover:shadow-black/40 transition-shadow flex flex-col justify-between min-h-[320px]"
+              >
+                <div>
+                    <motion.div layoutId={`type-${project.id}`} className="mb-4 flex justify-between items-start">
+                        <span className={`inline-block px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide bg-${project.color}-100 dark:bg-${project.color}-900/30 text-${project.color}-600 dark:text-${project.color}-400`}>
+                            {project.type}
+                        </span>
+                        <div className="bg-zinc-100 dark:bg-stone-800 text-zinc-400 dark:text-stone-500 group-hover:bg-zinc-900 dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-stone-900 p-2 rounded-full transition-colors">
+                            <Plus className="w-4 h-4" />
+                        </div>
+                    </motion.div>
+                    
+                    <motion.h3 layoutId={`title-${project.id}`} className="font-display font-bold text-2xl text-zinc-900 dark:text-stone-200 mb-3 leading-tight">
+                        {project.title}
+                    </motion.h3>
+                    
+                    <motion.p layoutId={`desc-${project.id}`} className="text-zinc-500 dark:text-stone-400 font-medium text-base leading-relaxed mb-6">
+                        {project.shortDescription}
+                    </motion.p>
+                </div>
 
-              <div className="space-y-3">
-                  <div className="flex flex-wrap gap-2">
-                      {project.techStack.slice(0, 3).map((tech, i) => (
-                          <span key={i} className="text-xs font-semibold text-zinc-500 dark:text-stone-400 bg-zinc-50 dark:bg-stone-800 px-2 py-1 rounded-md border border-zinc-100 dark:border-stone-700">
-                              {tech}
-                          </span>
-                      ))}
-                      {project.techStack.length > 3 && (
-                          <span className="text-xs font-semibold text-zinc-400 dark:text-stone-500 bg-zinc-50 dark:bg-stone-800 px-2 py-1 rounded-md border border-zinc-100 dark:border-stone-700">+{project.techStack.length - 3}</span>
-                      )}
-                  </div>
-              </div>
-            </motion.div>
+                <div className="space-y-3">
+                    <div className="flex flex-wrap gap-2">
+                        {project.techStack.slice(0, 3).map((tech, i) => (
+                            <span key={i} className="text-xs font-semibold text-zinc-500 dark:text-stone-400 bg-zinc-50 dark:bg-stone-800 px-2 py-1 rounded-md border border-zinc-100 dark:border-stone-700">
+                                {tech}
+                            </span>
+                        ))}
+                        {project.techStack.length > 3 && (
+                            <span className="text-xs font-semibold text-zinc-400 dark:text-stone-500 bg-zinc-50 dark:bg-stone-800 px-2 py-1 rounded-md border border-zinc-100 dark:border-stone-700">+{project.techStack.length - 3}</span>
+                        )}
+                    </div>
+                </div>
+              </motion.div>
+            </ProximityAware>
           ))}
         </motion.div>
       </motion.div>
@@ -197,24 +199,28 @@ export const Projects: React.FC = () => {
                         {/* Actions */}
                         <div className="pt-4 flex flex-wrap gap-4 justify-end border-t border-zinc-100 dark:border-stone-800">
                             {selectedProject.repoUrl && (
-                                <a 
-                                    href={selectedProject.repoUrl} 
-                                    target="_blank" 
-                                    rel="noreferrer"
-                                    className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-zinc-700 dark:text-stone-300 bg-zinc-100 dark:bg-stone-800 hover:bg-zinc-200 dark:hover:bg-stone-700 transition-colors"
-                                >
-                                    <Github className="w-4 h-4" /> View Code
-                                </a>
+                                <ProximityAware distanceThreshold={150} lift={6}>
+                                  <a 
+                                      href={selectedProject.repoUrl} 
+                                      target="_blank" 
+                                      rel="noreferrer"
+                                      className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-zinc-700 dark:text-stone-300 bg-zinc-100 dark:bg-stone-800 hover:bg-zinc-200 dark:hover:bg-stone-700 transition-colors"
+                                  >
+                                      <Github className="w-4 h-4" /> View Code
+                                  </a>
+                                </ProximityAware>
                             )}
                             {selectedProject.demoUrl && (
-                                <a 
-                                    href={selectedProject.demoUrl} 
-                                    target="_blank" 
-                                    rel="noreferrer"
-                                    className="flex items-center gap-2 bg-zinc-900 dark:bg-white text-white dark:text-stone-900 px-6 py-3 rounded-xl font-bold hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-transform active:scale-95 shadow-lg shadow-zinc-900/10 dark:shadow-none"
-                                >
-                                    Live Demo <ExternalLink className="w-4 h-4" />
-                                </a>
+                                <ProximityAware distanceThreshold={150} lift={6}>
+                                  <a 
+                                      href={selectedProject.demoUrl} 
+                                      target="_blank" 
+                                      rel="noreferrer"
+                                      className="flex items-center gap-2 bg-zinc-900 dark:bg-white text-white dark:text-stone-900 px-6 py-3 rounded-xl font-bold hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-transform active:scale-95 shadow-lg shadow-zinc-900/10 dark:shadow-none"
+                                  >
+                                      Live Demo <ExternalLink className="w-4 h-4" />
+                                  </a>
+                                </ProximityAware>
                             )}
                         </div>
                     </motion.div>
