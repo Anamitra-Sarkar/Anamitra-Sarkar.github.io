@@ -55,17 +55,20 @@ export const ProximityAware: React.FC<ProximityAwareProps> = ({
 
   // Update the distance whenever mouse moves or element position changes
   useEffect(() => {
-    const unsubscribeX = mouseX.on('change', (x) => {
+    // Consolidated function to calculate and update distance
+    const updateDistance = () => {
+      const x = mouseX.get();
       const y = mouseY.get();
       const dist = Math.sqrt(Math.pow(centerX - x, 2) + Math.pow(centerY - y, 2));
       distanceMotionValue.set(dist);
-    });
+    };
 
-    const unsubscribeY = mouseY.on('change', (y) => {
-      const x = mouseX.get();
-      const dist = Math.sqrt(Math.pow(centerX - x, 2) + Math.pow(centerY - y, 2));
-      distanceMotionValue.set(dist);
-    });
+    // Subscribe to mouse position changes
+    const unsubscribeX = mouseX.on('change', updateDistance);
+    const unsubscribeY = mouseY.on('change', updateDistance);
+
+    // Initial distance calculation
+    updateDistance();
 
     return () => {
       unsubscribeX();
