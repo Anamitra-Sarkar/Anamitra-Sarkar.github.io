@@ -74,7 +74,7 @@ export const ProximityAware: React.FC<ProximityAwareProps> = ({
       unsubscribeX();
       unsubscribeY();
     };
-  }, [mouseX, mouseY, centerX, centerY, distanceMotionValue]);
+  }, [mouseX, mouseY, centerX, centerY]);
 
   // Transform the distance into a proximity value (0 = far, 1 = close)
   const proximity = useTransform(distanceMotionValue, [distanceThreshold, 0], [0, 1]);
