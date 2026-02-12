@@ -1,6 +1,21 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Outfit', sans-serif;
+  
+  --color-warm-50: #FFFCF8;
+  --color-warm-100: #FDF6E3;
+  
+  --color-stone-850: #1f1c1a;
+  --color-stone-950: #0c0a09;
+  
+  --color-accent-purple: #8B5CF6;
+  --color-accent-pink: #EC4899;
+  --color-accent-orange: #F97316;
+  --color-accent-teal: #14B8A6;
+  --color-accent-blue: #3B82F6;
+}
 
 html {
     width: 100%;
