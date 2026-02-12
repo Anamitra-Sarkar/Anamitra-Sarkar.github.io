@@ -109,7 +109,7 @@ export const Engineering: React.FC = () => {
     );
 }
 
-const StoryCard = ({ story }: { story: any }) => {
+const StoryCard: React.FC<{ story: any }> = ({ story }) => {
     const [expanded, setExpanded] = useState(false);
 
     return (

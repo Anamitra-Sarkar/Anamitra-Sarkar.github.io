@@ -105,7 +105,7 @@ export const AmbientBackground: React.FC = () => {
   }, [theme]);
 
   return (
-    <div className="fixed inset-0 z-[-1] pointer-events-none overflow-hidden bg-warm-50 dark:bg-stone-950 transition-colors duration-500">
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-warm-50 dark:bg-stone-950 transition-colors duration-500">
         <canvas 
             ref={canvasRef} 
             className="block w-full h-full"

@@ -75,3 +75,50 @@ export const Hero: React.FC = () => {
             className="text-lg md:text-2xl text-zinc-600 dark:text-stone-400 max-w-2xl leading-relaxed mb-10 font-medium"
           >
              Hi, I'm <strong className="text-zinc-900 dark:text-stone-200">{PERSONAL_INFO.name}</strong>. {HERO_VARIANTS[index].subline}
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="flex flex-col sm:flex-row gap-5 items-start sm:items-center"
+          >
+            <button 
+              onClick={scrollToProjects}
+              className="px-8 py-4 bg-zinc-900 dark:bg-white text-white dark:text-stone-900 font-bold rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all hover:shadow-lg hover:shadow-zinc-900/20 active:scale-95 cursor-pointer"
+            >
+              See My Work
+            </button>
+            
+            <div className="flex gap-4 items-center pl-2">
+               <SocialLink href={PERSONAL_INFO.github} icon={Github} />
+               <SocialLink href={PERSONAL_INFO.linkedin} icon={Linkedin} />
+               <SocialLink href={PERSONAL_INFO.huggingface} icon={BrainCircuit} />
+            </div>
+          </motion.div>
+        </div>
+      </div>
+      
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1, duration: 1 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-zinc-400 dark:text-stone-600"
+      >
+        <span className="text-xs font-bold tracking-widest uppercase">Scroll</span>
+        <ArrowDown className="w-4 h-4 animate-bounce" />
+      </motion.div>
+    </div>
+  );
+};
+
+const SocialLink = ({ href, icon: Icon }: { href: string, icon: any }) => (
+  <a 
+    href={href} 
+    target="_blank" 
+    rel="noopener noreferrer"
+    className="p-3 bg-white dark:bg-stone-800 border border-zinc-200 dark:border-stone-700 rounded-full text-zinc-600 dark:text-stone-400 hover:text-zinc-900 dark:hover:text-white hover:border-zinc-400 dark:hover:border-stone-500 hover:scale-110 transition-all duration-300"
+  >
+    <Icon className="w-5 h-5" />
+  </a>
+);
