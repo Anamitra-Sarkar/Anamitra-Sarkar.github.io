@@ -51,7 +51,7 @@ export const AmbientBackground: React.FC = () => {
 
       // Use screen blend mode for glowing effect in dark mode
       ctx.globalCompositeOperation = theme === 'dark' ? 'screen' : 'multiply';
-      const alphaBase = theme === 'dark' ? 0.15 : 0.08;
+      const alphaBase = theme === 'dark' ? 0.15 : 0.12;
       
       // Increment time for animation
       time += 0.5;
