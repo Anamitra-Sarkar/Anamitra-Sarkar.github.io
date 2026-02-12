@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowUp } from 'lucide-react';
-import { useScrollData } from './providers/ScrollProvider';
-import { ProximityAware } from './ui/ProximityAware';
+import { useScrollData } from '../providers/ScrollProvider';
+import { ProximityAware } from './ProximityAware';
 
 export const ScrollToTopButton: React.FC = () => {
   const { scrollY } = useScrollData();

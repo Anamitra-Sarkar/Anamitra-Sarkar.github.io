@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, useTransform, AnimatePresence } from 'framer-motion';
-import { useMousePosition } from './providers/MouseProvider';
+import { useMousePosition } from '../providers/MouseProvider';
 import { useSelection } from '../providers/SelectionProvider';
 
 const Cursor: React.FC = () => {
