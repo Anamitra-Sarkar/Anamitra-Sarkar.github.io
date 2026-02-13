@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { motion, useTransform, useSpring } from 'framer-motion';
+import { motion, useTransform, useSpring, useMotionValue } from 'framer-motion';
 import { useMousePosition } from '../providers/MouseProvider';
 
 interface ProximityAwareProps {
@@ -50,11 +50,34 @@ export const ProximityAware: React.FC<ProximityAwareProps> = ({
   const centerX = elementPosition.x + elementPosition.width / 2;
   const centerY = elementPosition.y + elementPosition.height / 2;
 
-  // Calculate the distance from the mouse to the center of the element
-  const distance = Math.sqrt(Math.pow(centerX - mouseX, 2) + Math.pow(centerY - mouseY, 2));
+  // Create a MotionValue for the distance from the mouse to the center of the element
+  const distanceMotionValue = useMotionValue(0);
+
+  // Update the distance whenever mouse moves or element position changes
+  useEffect(() => {
+    // Consolidated function to calculate and update distance
+    const updateDistance = () => {
+      const x = mouseX.get();
+      const y = mouseY.get();
+      const dist = Math.sqrt(Math.pow(centerX - x, 2) + Math.pow(centerY - y, 2));
+      distanceMotionValue.set(dist);
+    };
+
+    // Subscribe to mouse position changes
+    const unsubscribeX = mouseX.on('change', updateDistance);
+    const unsubscribeY = mouseY.on('change', updateDistance);
+
+    // Initial distance calculation
+    updateDistance();
+
+    return () => {
+      unsubscribeX();
+      unsubscribeY();
+    };
+  }, [mouseX, mouseY, centerX, centerY]);
 
   // Transform the distance into a proximity value (0 = far, 1 = close)
-  const proximity = useTransform(distance, [distanceThreshold, 0], [0, 1]);
+  const proximity = useTransform(distanceMotionValue, [distanceThreshold, 0], [0, 1]);
 
   // Use a spring to smooth the proximity value for natural-feeling animations
   const smoothProximity = useSpring(proximity, { stiffness: 500, damping: 40, mass: 1 });

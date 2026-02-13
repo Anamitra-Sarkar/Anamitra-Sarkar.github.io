@@ -5,7 +5,7 @@ import { useScrollData } from '../components/providers/ScrollProvider';
 import { Sun, Moon } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
-  const { scrollY, scrollVelocity } = useScrollData();
+  const { scrollY, scrollVelocity, springScrollY } = useScrollData();
   const { theme, toggleTheme } = useTheme();
 
   // Spring-ify the scroll velocity for smoother animations
@@ -19,7 +19,7 @@ export const Navbar: React.FC = () => {
   const scale = useTransform(smoothScrollVelocity, [-15, 0, 15], [0.9, 1, 0.9]);
 
   // Hide the navbar if the user scrolls past a certain threshold
-  const y = useTransform(scrollY, (latest) => {
+  const y = useTransform(springScrollY, (latest: number) => {
     return latest > 300 ? '-100%' : '0%';
   });
 
