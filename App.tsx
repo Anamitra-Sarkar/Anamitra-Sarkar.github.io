@@ -20,6 +20,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { ScrollProvider } from './components/providers/ScrollProvider';
 import { MouseProvider } from './components/providers/MouseProvider';
 import { SelectionProvider, useSelection } from './components/providers/SelectionProvider';
+import './components/ui/CustomScrollbar.css';
 
 function AppContent() {
   const { stopSelecting, updateSelection } = useSelection();
@@ -63,7 +64,7 @@ function AppContent() {
         <ParallaxSection speed={0.02}>
           <Skills />
         </ParallaxSection>
-        <ParallaxSection speed={0.02}>
+        <ParallaxSection speed={0.02} className="mb-24">
           <Experience />
         </ParallaxSection>
         <Footer />

@@ -6,7 +6,7 @@ import { Briefcase, GraduationCap, Trophy } from 'lucide-react';
 export const Experience: React.FC = () => {
   return (
     <div className="bg-white dark:bg-stone-900 transition-colors duration-500">
-      <Section id="experience" className="!pt-12">
+      <Section id="experience" className="!pt-12 pb-24">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
           {/* Work Experience */}
