@@ -34,7 +34,7 @@ const iconVariants = {
 
 export const Skills: React.FC = () => {
   return (
-    <Section id="skills" className="bg-white dark:bg-stone-900 transition-colors duration-500">
+    <Section id="skills" className="bg-white dark:bg-stone-900 transition-colors duration-500 !pb-12">
       <motion.div
         initial="hidden"
         whileInView="visible"
