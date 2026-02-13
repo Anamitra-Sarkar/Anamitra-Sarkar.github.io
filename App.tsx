@@ -51,7 +51,7 @@ function AppContent() {
         <ParallaxSection speed={0.02}>
           <Projects />
         </ParallaxSection>
-        <ParallaxSection speed={0.05}>
+        <ParallaxSection speed={0.02} className="mb-6">
           <Models />
         </ParallaxSection>
         <ParallaxSection speed={0.02}>
@@ -63,7 +63,7 @@ function AppContent() {
         <ParallaxSection speed={0.02}>
           <Skills />
         </ParallaxSection>
-        <ParallaxSection speed={0.05}>
+        <ParallaxSection speed={0.02}>
           <Experience />
         </ParallaxSection>
         <Footer />
