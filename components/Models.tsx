@@ -57,7 +57,7 @@ export const Models: React.FC = () => {
             rel="noreferrer" 
             className="inline-flex items-center gap-2 font-bold text-zinc-600 dark:text-stone-400 hover:text-zinc-900 dark:hover:text-white border-b-2 border-zinc-200 dark:border-stone-700 hover:border-zinc-900 dark:hover:border-white transition-all pb-1"
         >
-            View all 35+ Models on Hugging Face <ExternalLink className="w-4 h-4" />
+            View all 80+ Models on Hugging Face <ExternalLink className="w-4 h-4" />
         </a>
       </div>
     </Section>
