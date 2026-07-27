@@ -14,7 +14,7 @@ import { SkillCategory, Project, Experience, Education, Achievement, Model } fro
 
 export const PERSONAL_INFO = {
   name: "Anamitra Sarkar",
-  title: "Full-Stack Engineer + AI Researcher",
+  title: "AI/ML Engineer & Developer",
   email: "anamitrasarkar13@gmail.com",
   phone: "+91 99037 19645",
   location: "Kolkata, India",
@@ -23,7 +23,7 @@ export const PERSONAL_INFO = {
   huggingface: "https://huggingface.co/Arko007"
 };
 
-export const EXECUTIVE_SUMMARY = "Software engineer focusing on systems, full-stack development, and applied AI. I specialize in training Small Language Models (SLMs) for efficient inference and building the robust infrastructure needed to deploy them. My work ranges from kernel-level customization to developing production-grade AI applications, with an emphasis on performance and thoughtful UX.";
+export const EXECUTIVE_SUMMARY = "AI/ML Engineer specializing in training Small Language Models (SLMs) for efficient inference and building the robust infrastructure needed to deploy them. My work ranges from model architecture design to developing production-grade AI applications, with an emphasis on performance and thoughtful UX.";
 
 export const HERO_VARIANTS = [
   {
@@ -32,7 +32,7 @@ export const HERO_VARIANTS = [
   },
   {
     headline: "Full-stack & systems.",
-    subline: "From custom Linux kernels to deploying efficient SLMs at the edge."
+    subline: "From model architecture design to full-stack AI deployment."
   },
   {
     headline: "Research to production.",
@@ -62,7 +62,6 @@ export const SKILLS: SkillCategory[] = [
       { name: "Node.js / Express" },
       { name: "Python / FastAPI" },
       { name: "Java (Elite)" },
-      { name: "Linux Kernel" },
       { name: "REST / GraphQL APIs" }
     ]
   },
@@ -132,6 +131,14 @@ export const MODELS: Model[] = [
     metrics: ["Forensics", "Research Only"],
     tags: ["Security", "Vision"],
     link: "https://huggingface.co/Arko007/deepfake-detector-dfd-sota"
+  },
+  {
+    id: "zenyx-v3",
+    name: "Zenyx V3 — 1.58B Sparse MoE",
+    description: "Training a 1.58B MoE with Multi-head Latent Attention, Hyper-Connections, and Top-2 expert routing on TPU v5e-8.",
+    metrics: ["1.58B Params", "Sparse MoE (12 Experts)", "MLA", "Hyper-Connections"],
+    tags: ["Research", "NLP", "Foundation Model"],
+    link: "https://huggingface.co/Arko007/Zenyx-V3-Base"
   }
 ];
 
@@ -143,6 +150,7 @@ export const PROJECTS: Project[] = [
     type: "Healthcare + AI",
     shortDescription: "A Smart India Hackathon 2025 finalist project integrating Gemini 2.0 with custom vision models.",
     color: "teal",
+    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80",
     techStack: ["React", "Gemini 2.0", "EfficientNet", "Flask", "Tailwind"],
     repoUrl: "https://github.com/Anamitra-Sarkar/MedAI",
     featured: true,
@@ -168,6 +176,7 @@ const handleAnalysis = async (image, history) => {
     type: "Generative AI",
     shortDescription: "Training nano-scale reasoning models (220M) to rival larger architectures using DeepSeek distillates.",
     color: "purple",
+    image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&q=80",
     techStack: ["PyTorch", "JAX/Flax", "Transformers", "TPU v5e"],
     repoUrl: "https://huggingface.co/Arko007/zenyx-deepseek-220m",
     featured: true,
@@ -192,6 +201,7 @@ const handleAnalysis = async (image, history) => {
     type: "Multi-Modal Forensics",
     shortDescription: "A comprehensive misinformation defense suite (formerly Credo AI). Features 71.25% accuracy text classifiers and deepfake detection.",
     color: "indigo",
+    image: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&q=80",
     techStack: ["RoBERTa", "DeBERTa", "React", "Chrome Ext", "Flask"],
     repoUrl: "https://github.com/Anamitra-Sarkar/Credo_AI",
     featured: true,
@@ -267,6 +277,7 @@ class TextVerifier(nn.Module):
     type: "Infrastructure / AI Ops",
     shortDescription: "A universal transparent proxy that reduces AI API token usage by 15–40% by compressing prompts and tool outputs in real-time.",
     color: "emerald",
+    image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=800&q=80",
     techStack: ["Python", "mitmproxy", "FastAPI", "OpenAI", "Anthropic", "Gemini"],
     repoUrl: "https://github.com/Anamitra-Sarkar/budget-ai",
     featured: true,
@@ -282,34 +293,6 @@ class TextVerifier(nn.Module):
             msg.content = self._remove_boilerplate(msg.content)
         return messages`,
       outcome: "Achieves 15–40% token reduction across all major AI coding tools without degrading output quality. Features budget policies, real-time CLI analytics, and exact-match caching."
-    }
-  },
-  {
-    id: "zenyx-v3",
-    title: "Zenyx V3 — 1.58B MoE",
-    role: "Lead Researcher",
-    type: "Generative AI / Foundation Model",
-    shortDescription: "Training a 1.58B parameter Sparse MoE language model with Multi-head Latent Attention and Hyper-Connections on TPU v5e.",
-    color: "fuchsia",
-    techStack: ["JAX/Flax", "TPU v5e-8", "Sparse MoE", "MLA", "Hyper-Connections", "YaRN RoPE", "Multi-Token Prediction"],
-    repoUrl: "https://huggingface.co/Arko007/Zenyx-V3-Base",
-    featured: true,
-    caseStudy: {
-      problem: "Existing small language models (<2B) lack reasoning depth for complex tasks, while large models are too expensive to serve. There is a gap for a highly efficient, moderately-sized model with modern architectural innovations.",
-      solution: "Training Zenyx V3 — a 1.58B parameter Sparse Mixture-of-Experts model (12 routed experts, Top-2 activated per token) with Multi-head Latent Attention (MLA) for efficient KV-cache compression, Hyper-Connections for improved gradient flow across 16 layers, and Multi-Token Prediction (MTP). The 26-source dataset spans FineWeb-Edu, StarCoder, Cosmopedia, Wikipedia, Nemotron, and FineMath, trained on TPU v5e-8 with progressive context scaling (2K→8K) using YaRN-extended RoPE and a custom O(1) resumable data pipeline.",
-      architectureSnippet: "Input Tokens -> [×16 Layers: MLA (q_lora_rank=384, o_lora_rank=256) -> Sparse MoE (12 experts, Top-2) -> Hyper-Connections (hc_mult=3) -> YaRN RoPE] -> MTP Head -> Output Logits",
-      codeSnippet: `@dataclass
-class ZenyxV3Config:
-    dim: int = 1536           # 1.58B params
-    n_layers: int = 16
-    n_heads: int = 12         # MLA
-    q_lora_rank: int = 384
-    n_routed_experts: int = 12  # Top-2 Sparse MoE
-    n_activated_experts: int = 2
-    moe_inter_dim: int = 1408
-    hc_mult: int = 3          # Hyper-Connections
-    ctx_phases: tuple = ((2048, 60k), (4096, 80k), (8192, 100k))`,
-      outcome: "Ongoing pre-training (200K steps) on TPU v5e-8 with JAX/Flax bf16. Custom O(1) resumable pipeline across 26 sources, Muon optimizer with Newton-Schulz steps, and Sinkhorn-based expert load balancing."
     }
   }
 ];

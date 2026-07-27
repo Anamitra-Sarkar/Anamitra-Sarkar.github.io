@@ -32,10 +32,13 @@ export const Projects: React.FC = () => {
               transition={{ duration: 0.8, delay: index * 0.1, ease: [0.6, 0.05, 0.01, 0.9] }}
               className={`group cursor-pointer relative flex flex-col ${index % 2 !== 0 ? 'md:mt-32' : ''}`}
             >
-              {/* Project Image / Abstract Block */}
+               {/* Project Image / Abstract Block */}
               <div className="w-full aspect-[4/3] bg-zinc-200 dark:bg-stone-900 overflow-hidden mb-6 relative">
-                 {/* Abstract geometric representation of the project using the color */}
-                 <div className={`absolute inset-0 bg-${project.color}-500/10 dark:bg-${project.color}-500/5 mix-blend-multiply dark:mix-blend-screen transition-all duration-700 group-hover:scale-105`} />
+                 {project.image ? (
+                   <img src={project.image} alt={project.title} className="absolute inset-0 w-full h-full object-cover transition-all duration-700 group-hover:scale-105" />
+                 ) : (
+                   <div className={`absolute inset-0 bg-${project.color}-500/10 dark:bg-${project.color}-500/5 mix-blend-multiply dark:mix-blend-screen transition-all duration-700 group-hover:scale-105`} />
+                 )}
                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm bg-black/20 dark:bg-white/10">
                      <span className="font-sans tracking-widest text-xs text-white font-medium uppercase px-4 py-2 border border-white/30 backdrop-blur-md">View Study</span>
                  </div>

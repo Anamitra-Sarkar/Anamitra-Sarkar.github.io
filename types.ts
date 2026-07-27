@@ -32,6 +32,7 @@ export interface Project {
   repoUrl?: string;
   demoUrl?: string;
   color: string;
+  image?: string;
   collaborators?: string; // To mark Bhumika repos etc.
   featured?: boolean;
 }
