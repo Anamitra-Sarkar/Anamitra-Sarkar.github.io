@@ -34,38 +34,38 @@ const iconVariants = {
 
 export const Skills: React.FC = () => {
   return (
-    <Section id="skills" className="bg-white dark:bg-stone-900 transition-colors duration-500 !pb-12">
+    <Section id="skills" className="bg-[#F4F3EF] dark:bg-[#0A0A0A] transition-colors duration-500 !pb-12 border-t border-zinc-300 dark:border-stone-800 pt-24 mt-24">
       <motion.div
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.1 }}
         variants={containerVariants}
       >
-        <motion.div variants={itemVariants} className="mb-12 text-center md:text-left">
-          <h2 className="font-display font-bold text-4xl text-zinc-900 dark:text-stone-100 mb-4">Tech Stack & Tools</h2>
-          <p className="text-zinc-500 dark:text-stone-400 max-w-2xl">
-            The arsenal I use to bring ideas to life. From frontend finesse to backend brawn.
+        <motion.div variants={itemVariants} className="mb-16 text-center md:text-left">
+          <h2 className="font-display font-medium text-5xl md:text-7xl text-zinc-950 dark:text-stone-50 mb-6 tracking-tight">Capabilities</h2>
+          <p className="text-zinc-600 dark:text-stone-400 max-w-2xl font-sans text-lg font-light leading-relaxed">
+            The technical stack deployed to bring complex systems and elegant interfaces to life.
           </p>
         </motion.div>
 
-        <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" variants={containerVariants}>
+        <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-0 border border-zinc-300 dark:border-stone-800" variants={containerVariants}>
           {SKILLS.map((category, idx) => (
             <motion.div 
               key={idx} 
               variants={itemVariants}
-              className="p-8 rounded-3xl border border-zinc-100 dark:border-stone-800 bg-white dark:bg-stone-950/50 shadow-sm hover:shadow-xl hover:border-zinc-200 dark:hover:border-stone-700 transition-all duration-300"
+              className={`p-10 border-b lg:border-b-0 lg:border-r border-zinc-300 dark:border-stone-800 bg-[#F4F3EF] dark:bg-[#0A0A0A] hover:bg-white dark:hover:bg-stone-900 transition-colors duration-500 ${idx === SKILLS.length - 1 ? 'border-b-0 lg:border-r-0' : ''}`}
             >
-              <motion.div variants={iconVariants} className={`inline-flex p-3 rounded-xl ${category.color} dark:bg-opacity-20 mb-6`}>
-                  <category.icon className="w-6 h-6" />
+              <motion.div variants={iconVariants} className={`mb-8 opacity-70`}>
+                  <category.icon className="w-8 h-8 text-zinc-900 dark:text-stone-100" strokeWidth={1} />
               </motion.div>
-              <h3 className="font-display font-bold text-xl text-zinc-900 dark:text-stone-200 mb-6">{category.title}</h3>
+              <h3 className="font-sans font-medium text-sm tracking-widest uppercase text-zinc-900 dark:text-stone-100 mb-8">{category.title}</h3>
               
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-col gap-4">
                 {category.skills.map((skill, sIdx) => (
                   <motion.span 
                     key={sIdx} 
                     variants={iconVariants}
-                    className="px-3 py-2 text-sm bg-zinc-50 dark:bg-stone-800 border border-zinc-100 dark:border-stone-700 rounded-lg text-zinc-600 dark:text-stone-300 font-semibold hover:bg-zinc-100 dark:hover:bg-stone-700 hover:scale-105 transition-all cursor-default"
+                    className="text-zinc-600 dark:text-stone-400 font-sans font-light text-sm"
                   >
                     {skill.name}
                   </motion.span>

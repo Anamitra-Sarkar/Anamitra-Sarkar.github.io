@@ -2,225 +2,192 @@ import React, { useState } from 'react';
 import { Section } from './ui/Section';
 import { PROJECTS } from '../constants';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Plus, X, ExternalLink, Github, Code2, Layers } from 'lucide-react';
+import { X, ExternalLink, Github, ArrowRight } from 'lucide-react';
 import { ProximityAware } from './ui/ProximityAware';
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const titleVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: 'easeOut' },
-  },
-};
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: 'easeOut' },
-  },
-};
 
 export const Projects: React.FC = () => {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const selectedProject = PROJECTS.find(p => p.id === selectedId);
 
   return (
-    <Section id="projects">
-      <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.1 }}
-        variants={containerVariants}
-      >
-        <motion.div variants={titleVariants} className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-          <div>
-            <h2 className="font-display font-extrabold text-4xl md:text-5xl text-zinc-900 dark:text-stone-100 mb-4">
-              Selected Work
+    <Section id="projects" className="py-32">
+      <div className="flex flex-col md:flex-row justify-between items-end mb-20 gap-6">
+          <div className="w-full">
+            <h2 className="font-display text-5xl md:text-7xl text-zinc-950 dark:text-stone-50 font-medium mb-6 tracking-tight">
+              Selected Works
             </h2>
-            <p className="text-zinc-500 dark:text-stone-400 text-lg max-w-xl">
-              A collection of high-impact projects where design meets deep tech. Click on any card to dive into the case study.
-            </p>
+            <div className="w-full h-px bg-zinc-300 dark:bg-stone-800" />
           </div>
-        </motion.div>
+      </div>
 
-        <motion.div 
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-          variants={containerVariants}
-        >
-          {PROJECTS.map((project) => (
-            <ProximityAware key={project.id}>
-              <motion.div
-                layoutId={`card-${project.id}`}
-                onClick={() => setSelectedId(project.id)}
-                variants={cardVariants}
-                className="group relative bg-white dark:bg-stone-900 rounded-3xl p-8 border border-zinc-200 dark:border-stone-800 cursor-pointer overflow-hidden hover:shadow-2xl hover:shadow-zinc-200/50 dark:hover:shadow-black/40 transition-shadow flex flex-col justify-between min-h-[320px]"
-              >
-                <div>
-                    <motion.div layoutId={`type-${project.id}`} className="mb-4 flex justify-between items-start">
-                        <span className={`inline-block px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide bg-${project.color}-100 dark:bg-${project.color}-900/30 text-${project.color}-600 dark:text-${project.color}-400`}>
-                            {project.type}
-                        </span>
-                        <div className="bg-zinc-100 dark:bg-stone-800 text-zinc-400 dark:text-stone-500 group-hover:bg-zinc-900 dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-stone-900 p-2 rounded-full transition-colors">
-                            <Plus className="w-4 h-4" />
-                        </div>
-                    </motion.div>
-                    
-                    <motion.h3 layoutId={`title-${project.id}`} className="font-display font-bold text-2xl text-zinc-900 dark:text-stone-200 mb-3 leading-tight">
-                        {project.title}
-                    </motion.h3>
-                    
-                    <motion.p layoutId={`desc-${project.id}`} className="text-zinc-500 dark:text-stone-400 font-medium text-base leading-relaxed mb-6">
-                        {project.shortDescription}
-                    </motion.p>
-                </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24">
+        {PROJECTS.filter(p => p.featured).map((project, index) => (
+          <ProximityAware key={project.id}>
+            <motion.div
+              layoutId={`card-${project.id}`}
+              onClick={() => setSelectedId(project.id)}
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.8, delay: index * 0.1, ease: [0.6, 0.05, 0.01, 0.9] }}
+              className={`group cursor-pointer relative flex flex-col ${index % 2 !== 0 ? 'md:mt-32' : ''}`}
+            >
+              {/* Project Image / Abstract Block */}
+              <div className="w-full aspect-[4/3] bg-zinc-200 dark:bg-stone-900 overflow-hidden mb-6 relative">
+                 {/* Abstract geometric representation of the project using the color */}
+                 <div className={`absolute inset-0 bg-${project.color}-500/10 dark:bg-${project.color}-500/5 mix-blend-multiply dark:mix-blend-screen transition-all duration-700 group-hover:scale-105`} />
+                 <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500 backdrop-blur-sm bg-black/20 dark:bg-white/10">
+                     <span className="font-sans tracking-widest text-xs text-white font-medium uppercase px-4 py-2 border border-white/30 backdrop-blur-md">View Study</span>
+                 </div>
+                 {/* Decorative typography in background */}
+                 <span className="absolute -bottom-8 -right-8 text-[12rem] font-display font-bold text-zinc-100 dark:text-stone-950 opacity-50 select-none pointer-events-none group-hover:translate-x-4 transition-transform duration-700">
+                    {project.title.charAt(0)}
+                 </span>
+              </div>
 
-                <div className="space-y-3">
-                    <div className="flex flex-wrap gap-2">
-                        {project.techStack.slice(0, 3).map((tech, i) => (
-                            <span key={i} className="text-xs font-semibold text-zinc-500 dark:text-stone-400 bg-zinc-50 dark:bg-stone-800 px-2 py-1 rounded-md border border-zinc-100 dark:border-stone-700">
-                                {tech}
-                            </span>
-                        ))}
-                        {project.techStack.length > 3 && (
-                            <span className="text-xs font-semibold text-zinc-400 dark:text-stone-500 bg-zinc-50 dark:bg-stone-800 px-2 py-1 rounded-md border border-zinc-100 dark:border-stone-700">+{project.techStack.length - 3}</span>
-                        )}
-                    </div>
-                </div>
-              </motion.div>
-            </ProximityAware>
-          ))}
-        </motion.div>
-      </motion.div>
+              {/* Text Block */}
+              <div>
+                  <div className="flex justify-between items-start mb-3">
+                      <motion.h3 layoutId={`title-${project.id}`} className="font-display text-3xl md:text-4xl text-zinc-900 dark:text-stone-100 font-medium">
+                          {project.title}
+                      </motion.h3>
+                      <ArrowRight className="w-6 h-6 text-zinc-400 dark:text-stone-600 group-hover:-rotate-45 transition-transform duration-500" />
+                  </div>
+                  
+                  <motion.div layoutId={`type-${project.id}`} className="flex items-center gap-4 mb-4">
+                      <span className="font-sans text-xs tracking-widest uppercase text-zinc-500 dark:text-stone-500">
+                          {project.type}
+                      </span>
+                      <span className="w-8 h-px bg-zinc-300 dark:bg-stone-700" />
+                      <span className="font-sans text-xs tracking-widest uppercase text-zinc-500 dark:text-stone-500">
+                          {project.role}
+                      </span>
+                  </motion.div>
+                  
+                  <motion.p layoutId={`desc-${project.id}`} className="text-zinc-600 dark:text-stone-400 font-sans font-light leading-relaxed mb-6">
+                      {project.shortDescription}
+                  </motion.p>
+              </div>
+            </motion.div>
+          </ProximityAware>
+        ))}
+      </div>
 
       <AnimatePresence>
         {selectedId && selectedProject && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8 pointer-events-none">
             <motion.div
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { duration: 0.5 } }}
+                exit={{ opacity: 0, transition: { duration: 0.3 } }}
                 onClick={() => setSelectedId(null)}
-                className="absolute inset-0 bg-zinc-900/60 dark:bg-black/80 backdrop-blur-sm pointer-events-auto"
+                className="absolute inset-0 bg-zinc-950/80 dark:bg-black/90 backdrop-blur-md pointer-events-auto"
             />
             
             <motion.div
                 layoutId={`card-${selectedId}`}
-                className="relative w-full max-w-4xl bg-white dark:bg-stone-900 rounded-3xl overflow-hidden shadow-2xl pointer-events-auto max-h-[90vh] overflow-y-auto no-scrollbar flex flex-col"
+                className="relative w-full max-w-5xl bg-[#F4F3EF] dark:bg-[#0A0A0A] overflow-hidden shadow-2xl pointer-events-auto max-h-[90vh] overflow-y-auto no-scrollbar flex flex-col border border-zinc-200 dark:border-stone-800"
             >
                 <button 
                     onClick={(e) => { e.stopPropagation(); setSelectedId(null); }}
-                    className="absolute top-6 right-6 z-10 p-2 bg-white/80 dark:bg-stone-800/80 hover:bg-zinc-100 dark:hover:bg-stone-700 rounded-full backdrop-blur-md transition-colors border border-zinc-200 dark:border-stone-700"
+                    className="sticky top-0 float-right self-end m-6 z-20 p-4 bg-[#F4F3EF] dark:bg-[#0A0A0A] hover:bg-zinc-200 dark:hover:bg-stone-900 border border-zinc-300 dark:border-stone-800 transition-colors"
                 >
-                    <X className="w-6 h-6 text-zinc-900 dark:text-white" />
+                    <X className="w-5 h-5 text-zinc-900 dark:text-white" />
                 </button>
 
-                <div className="p-8 md:p-12">
-                    <motion.div layoutId={`type-${selectedId}`} className="mb-4">
-                        <span className={`inline-block px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide bg-${selectedProject.color}-100 dark:bg-${selectedProject.color}-900/30 text-${selectedProject.color}-600 dark:text-${selectedProject.color}-400`}>
-                            {selectedProject.type}
-                        </span>
+                <div className="p-8 md:p-16 lg:p-24 pt-0">
+                    <motion.div layoutId={`type-${selectedId}`} className="mb-8 font-sans text-xs tracking-widest uppercase text-zinc-500 dark:text-stone-500 border-b border-zinc-300 dark:border-stone-800 pb-4 inline-block">
+                        {selectedProject.type} // {selectedProject.role}
                     </motion.div>
 
-                    <motion.h3 layoutId={`title-${selectedId}`} className="font-display font-bold text-4xl md:text-5xl text-zinc-900 dark:text-white mb-2">
+                    <motion.h3 layoutId={`title-${selectedId}`} className="font-display text-5xl md:text-7xl text-zinc-900 dark:text-white mb-12 font-medium">
                         {selectedProject.title}
                     </motion.h3>
 
                     <motion.div 
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="mt-8 space-y-10"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3, duration: 0.7, ease: [0.6, 0.05, 0.01, 0.9] }}
+                        className="space-y-16 font-sans"
                     >
-                        {/* Meta Info */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-8 border-b border-zinc-100 dark:border-stone-800">
+                        {/* Tech Stack */}
+                        <div>
+                            <h4 className="font-sans font-medium text-zinc-900 dark:text-stone-100 mb-4 text-sm uppercase tracking-widest">Technologies</h4>
+                            <div className="flex flex-wrap gap-2">
+                                {selectedProject.techStack.map(t => (
+                                    <span key={t} className="px-4 py-2 border border-zinc-300 dark:border-stone-800 text-xs font-medium text-zinc-600 dark:text-stone-400 uppercase tracking-wider">
+                                        {t}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Grid Content */}
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
                              <div>
-                                <h4 className="font-bold text-zinc-900 dark:text-stone-200 mb-2 text-sm uppercase tracking-wide">My Role</h4>
-                                <p className="text-zinc-600 dark:text-stone-400 font-medium">{selectedProject.role}</p>
+                                 <h4 className="font-display text-3xl text-zinc-900 dark:text-white mb-6">The Challenge</h4>
+                                 <p className="text-zinc-600 dark:text-stone-300 leading-relaxed font-light text-lg">
+                                     {selectedProject.caseStudy.problem}
+                                 </p>
                              </div>
-                             <div className="md:col-span-2">
-                                <h4 className="font-bold text-zinc-900 dark:text-stone-200 mb-2 text-sm uppercase tracking-wide">Tech Stack</h4>
-                                <div className="flex flex-wrap gap-2">
-                                    {selectedProject.techStack.map(t => (
-                                        <span key={t} className="px-3 py-1 bg-zinc-100 dark:bg-stone-800 rounded-md text-sm font-medium text-zinc-700 dark:text-stone-300">
-                                            {t}
-                                        </span>
-                                    ))}
+                             <div>
+                                 <h4 className="font-display text-3xl text-zinc-900 dark:text-white mb-6">The Approach</h4>
+                                 <p className="text-zinc-600 dark:text-stone-300 leading-relaxed font-light text-lg">
+                                     {selectedProject.caseStudy.solution}
+                                 </p>
+                             </div>
+                        </div>
+
+                        {/* Architecture / Code */}
+                        <div className="space-y-8">
+                            {selectedProject.caseStudy.architectureSnippet && (
+                                <div className="border-l-2 border-zinc-900 dark:border-stone-100 pl-6 py-2">
+                                    <h4 className="font-sans font-medium text-zinc-900 dark:text-white mb-2 uppercase tracking-widest text-xs">Architecture Pipeline</h4>
+                                    <p className="font-mono text-sm text-zinc-600 dark:text-stone-400">
+                                        {selectedProject.caseStudy.architectureSnippet}
+                                    </p>
                                 </div>
-                             </div>
+                            )}
+
+                            {selectedProject.caseStudy.codeSnippet && (
+                                <div className="bg-zinc-900 dark:bg-stone-900 p-8">
+                                    <h4 className="text-white font-medium mb-6 uppercase tracking-widest text-xs opacity-50">Implementation Detail</h4>
+                                    <pre className="font-mono text-sm text-zinc-300 overflow-x-auto whitespace-pre-wrap leading-relaxed">
+                                        {selectedProject.caseStudy.codeSnippet}
+                                    </pre>
+                                </div>
+                            )}
                         </div>
 
-                        {/* Case Study Content */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                             <CaseStudyBlock title="The Problem" content={selectedProject.caseStudy.problem} icon={Layers} />
-                             <CaseStudyBlock title="The Solution" content={selectedProject.caseStudy.solution} icon={Code2} />
+                        {/* Outcome */}
+                        <div className="bg-zinc-100 dark:bg-stone-950 p-8 md:p-12 border border-zinc-200 dark:border-stone-900">
+                             <h4 className="font-display text-3xl text-zinc-900 dark:text-white mb-6">The Outcome</h4>
+                             <p className="text-zinc-700 dark:text-stone-300 font-light leading-relaxed text-lg">
+                                 {selectedProject.caseStudy.outcome}
+                             </p>
                         </div>
 
-                        {selectedProject.caseStudy.architectureSnippet && (
-                            <div className="bg-zinc-900 dark:bg-black text-zinc-300 p-6 rounded-xl font-mono text-sm leading-relaxed overflow-x-auto border border-zinc-800 dark:border-stone-800">
-                                <h4 className="text-white font-bold mb-2 uppercase tracking-wide text-xs">Architecture</h4>
-                                {selectedProject.caseStudy.architectureSnippet}
-                            </div>
-                        )}
-
-                        {selectedProject.caseStudy.codeSnippet && (
-                            <div className="bg-zinc-50 dark:bg-stone-800/50 border border-zinc-200 dark:border-stone-700 p-6 rounded-xl">
-                                <h4 className="text-zinc-900 dark:text-stone-200 font-bold mb-4 uppercase tracking-wide text-xs">Key Implementation Logic</h4>
-                                <pre className="font-mono text-sm text-zinc-600 dark:text-stone-400 overflow-x-auto whitespace-pre-wrap">
-                                    {selectedProject.caseStudy.codeSnippet}
-                                </pre>
-                            </div>
-                        )}
-
-                        <div className="bg-teal-50 dark:bg-teal-900/20 p-6 rounded-xl border border-teal-100 dark:border-teal-900/30">
-                             <h4 className="text-teal-900 dark:text-teal-400 font-bold mb-2 uppercase tracking-wide text-xs">The Outcome</h4>
-                             <p className="text-teal-800 dark:text-teal-300 font-medium text-lg">{selectedProject.caseStudy.outcome}</p>
-                        </div>
-
-                        {selectedProject.collaborators && (
-                            <p className="text-sm text-zinc-400 italic">
-                                * {selectedProject.collaborators}
-                            </p>
-                        )}
-
-                        {/* Actions */}
-                        <div className="pt-4 flex flex-wrap gap-4 justify-end border-t border-zinc-100 dark:border-stone-800">
+                        {/* Links */}
+                        <div className="pt-8 flex flex-wrap gap-6 border-t border-zinc-300 dark:border-stone-800">
                             {selectedProject.repoUrl && (
-                                <ProximityAware distanceThreshold={150} lift={6}>
                                   <a 
                                       href={selectedProject.repoUrl} 
                                       target="_blank" 
                                       rel="noreferrer"
-                                      className="flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-zinc-700 dark:text-stone-300 bg-zinc-100 dark:bg-stone-800 hover:bg-zinc-200 dark:hover:bg-stone-700 transition-colors"
+                                      className="flex items-center gap-3 px-8 py-4 border border-zinc-900 dark:border-stone-100 font-sans font-medium text-sm tracking-widest uppercase text-zinc-900 dark:text-stone-100 hover:bg-zinc-900 hover:text-white dark:hover:bg-stone-100 dark:hover:text-zinc-900 transition-colors"
                                   >
-                                      <Github className="w-4 h-4" /> View Code
+                                      <Github className="w-4 h-4" /> Source Code
                                   </a>
-                                </ProximityAware>
                             )}
                             {selectedProject.demoUrl && (
-                                <ProximityAware distanceThreshold={150} lift={6}>
                                   <a 
                                       href={selectedProject.demoUrl} 
                                       target="_blank" 
                                       rel="noreferrer"
-                                      className="flex items-center gap-2 bg-zinc-900 dark:bg-white text-white dark:text-stone-900 px-6 py-3 rounded-xl font-bold hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-transform active:scale-95 shadow-lg shadow-zinc-900/10 dark:shadow-none"
+                                      className="flex items-center gap-3 bg-zinc-900 dark:bg-stone-100 text-white dark:text-zinc-900 px-8 py-4 font-sans font-medium text-sm tracking-widest uppercase hover:opacity-90 transition-opacity"
                                   >
-                                      Live Demo <ExternalLink className="w-4 h-4" />
+                                      Live Prototype <ExternalLink className="w-4 h-4" />
                                   </a>
-                                </ProximityAware>
                             )}
                         </div>
                     </motion.div>
@@ -232,14 +199,3 @@ export const Projects: React.FC = () => {
     </Section>
   );
 };
-
-const CaseStudyBlock = ({ title, content, icon: Icon }: { title: string, content: string, icon: any }) => (
-    <div>
-        <h4 className="font-bold text-xl text-zinc-900 dark:text-white mb-3 flex items-center gap-2">
-            <Icon className="w-5 h-5 text-zinc-400 dark:text-stone-500" /> {title}
-        </h4>
-        <p className="text-zinc-600 dark:text-stone-300 leading-relaxed text-lg">
-            {content}
-        </p>
-    </div>
-);

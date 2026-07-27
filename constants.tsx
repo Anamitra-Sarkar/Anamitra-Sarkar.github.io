@@ -6,7 +6,9 @@ import {
   Palette,
   Globe,
   Cpu,
-  Database
+  Database,
+  ShieldCheck,
+  Server
 } from 'lucide-react';
 import { SkillCategory, Project, Experience, Education, Achievement, Model } from './types';
 
@@ -21,34 +23,59 @@ export const PERSONAL_INFO = {
   huggingface: "https://huggingface.co/Arko007"
 };
 
-export const EXECUTIVE_SUMMARY = "A multidisciplinary engineer bridging the gap between systems programming and generative AI. With a deep focus on Small Language Models (SLMs) and efficient inference, I build full-stack applications that don't just consume APIs but optimize intelligence at the edge. From kernel customization in AetherOS to distilling reasoning capabilities in Zenyx-220M, my work prioritizes performance, privacy, and pixel-perfect UX.";
+export const EXECUTIVE_SUMMARY = "Software engineer focusing on systems, full-stack development, and applied AI. I specialize in training Small Language Models (SLMs) for efficient inference and building the robust infrastructure needed to deploy them. My work ranges from kernel-level customization to developing production-grade AI applications, with an emphasis on performance and thoughtful UX.";
 
 export const HERO_VARIANTS = [
   {
-    headline: "I build intelligence with soul.",
-    subline: "Fusing pixel-perfect UI with advanced AI models to create software that feels alive."
+    headline: "Engineering AI systems.",
+    subline: "I build specialized models and the full-stack infrastructure required to serve them."
   },
   {
-    headline: "Full-Stack. Fine-Tuned.",
-    subline: "From custom Linux kernels (AetherOS) to deployed LLMs (Zenyx). I own the entire stack."
+    headline: "Full-stack & systems.",
+    subline: "From custom Linux kernels to deploying efficient SLMs at the edge."
   },
   {
-    headline: "Shipping Production AI.",
-    subline: "Bridging the gap between research papers and responsive, user-loving applications."
+    headline: "Research to production.",
+    subline: "Turning complex ML architectures into robust, user-centric applications."
   }
 ];
 
 export const SKILLS: SkillCategory[] = [
   {
-    title: "UI/UX & Frontend",
+    title: "Frontend & UI Design",
     icon: Palette,
     color: "bg-pink-100 text-pink-600",
     skills: [
       { name: "React.js / Next.js" },
+      { name: "UI/UX Design" },
       { name: "Tailwind CSS" },
       { name: "Framer Motion" },
       { name: "TypeScript" },
-      { name: "Design Systems" }
+      { name: "Responsive Layouts" }
+    ]
+  },
+  {
+    title: "Backend & Systems",
+    icon: Server,
+    color: "bg-teal-100 text-teal-600",
+    skills: [
+      { name: "Node.js / Express" },
+      { name: "Python / FastAPI" },
+      { name: "Java (Elite)" },
+      { name: "Linux Kernel" },
+      { name: "REST / GraphQL APIs" }
+    ]
+  },
+  {
+    title: "DevOps & Security",
+    icon: ShieldCheck,
+    color: "bg-orange-100 text-orange-600",
+    skills: [
+      { name: "Docker / Kubernetes" },
+      { name: "CI/CD & Deployment" },
+      { name: "Cloud (GCP / AWS)" },
+      { name: "Security Auditing" },
+      { name: "Nginx / Proxies" }
     ]
   },
   {
@@ -61,18 +88,6 @@ export const SKILLS: SkillCategory[] = [
       { name: "RAG Pipelines" },
       { name: "Gemini API" },
       { name: "Model Quantization" }
-    ]
-  },
-  {
-    title: "Backend & Systems",
-    icon: Terminal,
-    color: "bg-teal-100 text-teal-600",
-    skills: [
-      { name: "Python / FastAPI" },
-      { name: "Java (Elite)" },
-      { name: "Docker / K8s" },
-      { name: "Linux Kernel" },
-      { name: "Google Cloud" }
     ]
   }
 ];
@@ -197,22 +212,6 @@ class TextVerifier(nn.Module):
     }
   },
   {
-    id: "aether",
-    title: "AetherOS",
-    role: "Systems Engineer",
-    type: "Operating System",
-    shortDescription: "A custom Linux distribution optimized for legacy hardware, featuring a bespoke KDE environment.",
-    color: "orange",
-    techStack: ["Linux Kernel", "Bash", "KDE Plasma", "Calamares"],
-    repoUrl: "https://github.com/Anamitra-Sarkar/Aether_OS",
-    featured: true,
-    caseStudy: {
-      problem: "Modern OS updates often render perfectly functional 5-year-old hardware obsolete due to bloat. Existing lightweight distros often compromise on UI polish.",
-      solution: "Engineered AetherOS based on Ubuntu LTS but stripped of telemetry and snap bloat. Implemented a custom pre-configuration of KDE Plasma to ensure low RAM usage (<600MB idle) while maintaining a 'glassy' modern aesthetic.",
-      outcome: "Successfully revived legacy hardware for local community use. Created a custom 'First Run Wizard' in Python/Qt to help non-technical users install necessary drivers."
-    }
-  },
-  {
     id: "synapse",
     title: "SYNAPSE AI",
     role: "Full-Stack Dev",
@@ -246,22 +245,6 @@ class TextVerifier(nn.Module):
     }
   },
   {
-    id: "kubeshield",
-    title: "Kubeshield",
-    role: "Security Engineer",
-    type: "DevSecOps",
-    shortDescription: "Automated Kubernetes cluster security scanner and compliance auditor.",
-    color: "red",
-    techStack: ["Go", "Kubernetes", "Shell", "Docker"],
-    repoUrl: "https://github.com/Anamitra-Sarkar/Kubeshield_CyberSecurity",
-    featured: false,
-    caseStudy: {
-      problem: "Manual security auditing of dynamic K8s clusters is impossible at scale.",
-      solution: "Developed a CLI tool that scans cluster configurations against CIS benchmarks and reports vulnerabilities.",
-      outcome: "Provides automated pass/fail reports for CI/CD pipelines, ensuring secure deployments."
-    }
-  },
-  {
     id: "stock",
     title: "MarketInsight",
     role: "Frontend Dev",
@@ -278,19 +261,55 @@ class TextVerifier(nn.Module):
     }
   },
   {
-    id: "ssh",
-    title: "SSH Log Analyzer",
-    role: "Backend Dev",
-    type: "Forensics",
-    shortDescription: "A Python tool for forensic analysis of server access logs to detect brute force attempts.",
-    color: "gray",
-    techStack: ["Python", "Regex", "Linux"],
-    repoUrl: "https://github.com/Anamitra-Sarkar/SSH-Log-Analyzer",
-    featured: false,
+    id: "budget-ai",
+    title: "Budget AI",
+    role: "Creator & Lead Engineer",
+    type: "Infrastructure / AI Ops",
+    shortDescription: "A universal transparent proxy that reduces AI API token usage by 15–40% by compressing prompts and tool outputs in real-time.",
+    color: "emerald",
+    techStack: ["Python", "mitmproxy", "FastAPI", "OpenAI", "Anthropic", "Gemini"],
+    repoUrl: "https://github.com/Anamitra-Sarkar/budget-ai",
+    featured: true,
     caseStudy: {
-      problem: "Parsing thousands of lines of auth.log to find intruders is tedious.",
-      solution: "Created a script that parses logs, geolocates IPs, and visualizes attack patterns.",
-      outcome: "Helps admins quickly identify and block malicious IP ranges."
+      problem: "AI coding tools burn through API tokens with verbose prompts filled with ANSI codes, stack traces, repeated boilerplate, and debug logs — wasting 15–40% of token budgets on noise.",
+      solution: "Built Budget AI — a transparent HTTPS proxy sitting between AI tools and API providers. It intercepts requests, losslessly compresses prompt history by stripping terminal noise, deduplicating repeated content, removing boilerplate, and collapsing separators. Includes a budget policy engine (auto-downgrade model on overage), real-time analytics CLI, and exact-match caching. Supports OpenAI, Anthropic, Gemini, and Groq through a unified adapter layer.",
+      architectureSnippet: "CLI Tool -> HTTPS Proxy (mitmproxy) -> Compression Engine (regex/dedup) -> Budget Policy Enforcer -> Provider Adapter [OpenAI/Anthropic/Gemini/Groq] -> Compressed Response",
+      codeSnippet: `class BudgetCompressor:
+    def compress(self, messages):
+        for msg in messages[1:-1]:  # skip system + last prompt
+            msg.content = self._strip_ansi(msg.content)
+            msg.content = self._deduplicate(msg.content)
+            msg.content = self._remove_boilerplate(msg.content)
+        return messages`,
+      outcome: "Achieves 15–40% token reduction across all major AI coding tools without degrading output quality. Features budget policies, real-time CLI analytics, and exact-match caching."
+    }
+  },
+  {
+    id: "zenyx-v3",
+    title: "Zenyx V3 — 1.58B MoE",
+    role: "Lead Researcher",
+    type: "Generative AI / Foundation Model",
+    shortDescription: "Training a 1.58B parameter Sparse MoE language model with Multi-head Latent Attention and Hyper-Connections on TPU v5e.",
+    color: "fuchsia",
+    techStack: ["JAX/Flax", "TPU v5e-8", "Sparse MoE", "MLA", "Hyper-Connections", "YaRN RoPE", "Multi-Token Prediction"],
+    repoUrl: "https://huggingface.co/Arko007/Zenyx-V3-Base",
+    featured: true,
+    caseStudy: {
+      problem: "Existing small language models (<2B) lack reasoning depth for complex tasks, while large models are too expensive to serve. There is a gap for a highly efficient, moderately-sized model with modern architectural innovations.",
+      solution: "Training Zenyx V3 — a 1.58B parameter Sparse Mixture-of-Experts model (12 routed experts, Top-2 activated per token) with Multi-head Latent Attention (MLA) for efficient KV-cache compression, Hyper-Connections for improved gradient flow across 16 layers, and Multi-Token Prediction (MTP). The 26-source dataset spans FineWeb-Edu, StarCoder, Cosmopedia, Wikipedia, Nemotron, and FineMath, trained on TPU v5e-8 with progressive context scaling (2K→8K) using YaRN-extended RoPE and a custom O(1) resumable data pipeline.",
+      architectureSnippet: "Input Tokens -> [×16 Layers: MLA (q_lora_rank=384, o_lora_rank=256) -> Sparse MoE (12 experts, Top-2) -> Hyper-Connections (hc_mult=3) -> YaRN RoPE] -> MTP Head -> Output Logits",
+      codeSnippet: `@dataclass
+class ZenyxV3Config:
+    dim: int = 1536           # 1.58B params
+    n_layers: int = 16
+    n_heads: int = 12         # MLA
+    q_lora_rank: int = 384
+    n_routed_experts: int = 12  # Top-2 Sparse MoE
+    n_activated_experts: int = 2
+    moe_inter_dim: int = 1408
+    hc_mult: int = 3          # Hyper-Connections
+    ctx_phases: tuple = ((2048, 60k), (4096, 80k), (8192, 100k))`,
+      outcome: "Ongoing pre-training (200K steps) on TPU v5e-8 with JAX/Flax bf16. Custom O(1) resumable pipeline across 26 sources, Muon optimizer with Newton-Schulz steps, and Sinkhorn-based expert load balancing."
     }
   }
 ];
@@ -325,7 +344,7 @@ export const EDUCATION: Education[] = [
     institution: "RCC Institute of Information Technology",
     location: "Kolkata, India",
     year: "2023 – 2027",
-    details: "3rd Year"
+    details: "4th Year"
   }
 ];
 

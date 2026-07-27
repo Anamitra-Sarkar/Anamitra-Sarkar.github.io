@@ -1,107 +1,86 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Section } from './ui/Section';
-import { Palette, Terminal, BrainCircuit } from 'lucide-react';
+import { Palette, Server, BrainCircuit, ShieldCheck } from 'lucide-react';
 
-// Variants for the main container to orchestrate staggering
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-      duration: 0.5,
-      ease: 'easeOut'
-    },
-  },
-};
-
-// Variants for individual items like the title or cards
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: 'easeOut' },
-  },
-};
-
-// Variants specifically for the icon scaling
-const iconVariants = {
-    hidden: { scale: 0.95, opacity: 0 },
-    visible: {
-        scale: 1,
-        opacity: 1,
-        transition: { duration: 0.4, ease: 'easeOut' }
-    }
-};
+const transition = { duration: 1.2, ease: [0.6, 0.05, 0.01, 0.9] };
 
 export const Services: React.FC = () => {
   return (
-    <Section className="relative z-20">
+    <Section className="relative z-20 py-32 border-b border-zinc-300 dark:border-stone-800">
       <motion.div
-        initial="hidden"
-        whileInView="visible"
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
-        variants={containerVariants}
+        transition={transition}
       >
-        <motion.div variants={itemVariants} className="text-center mb-16">
-          <h2 className="font-display font-bold text-4xl mb-4 text-zinc-900 dark:text-stone-100">Not just a coder. An Engineer.</h2>
-          <p className="text-zinc-500 dark:text-stone-400 max-w-xl mx-auto text-lg">
-              I don't just write scripts; I build complete, polished products from the kernel to the pixel.
-          </p>
-        </motion.div>
+        <div className="flex flex-col md:flex-row gap-12 justify-between items-start md:items-end mb-24">
+            <h2 className="font-display font-medium text-5xl md:text-7xl text-zinc-950 dark:text-stone-50 tracking-tight max-w-2xl">
+              Disciplines
+            </h2>
+            <p className="text-zinc-600 dark:text-stone-400 max-w-sm font-sans font-light text-lg leading-relaxed">
+              A multidisciplinary approach to engineering. From building low-level systems to crafting high-fidelity user experiences.
+            </p>
+        </div>
 
-        <motion.div 
-            className="grid grid-cols-1 md:grid-cols-3 gap-8"
-            variants={containerVariants} // This will stagger the ServiceCards
-        >
-          <ServiceCard 
-              title="UI/UX & Frontend" 
-              desc="I craft buttery smooth, accessible, and responsive interfaces. No boring layouts allowed."
-              icon={Palette}
-              color="bg-pink-500"
-              tags={["React", "Framer Motion", "Tailwind"]}
+        <div className="flex flex-col border-t border-zinc-300 dark:border-stone-800">
+          <ServiceRow 
+              title="Systems & DevOps" 
+              desc="Designing scalable cloud infrastructure, CI/CD pipelines, and secure server environments. From Kubernetes orchestration to Linux kernel customization."
+              icon={Server}
+              number="01"
           />
-          <ServiceCard 
-              title="Full-Stack Systems" 
-              desc="Robust backends, secure APIs, and custom OS environments. Scalability is standard."
-              icon={Terminal}
-              color="bg-teal-500"
-              tags={["Python", "Node.js", "Linux"]}
-          />
-          <ServiceCard 
-              title="AI & Machine Learning" 
-              desc="Deploying real intelligence. From RAG pipelines to optimizing SLMs for edge devices."
+          <ServiceRow 
+              title="Applied AI & ML" 
+              desc="Training and optimizing Small Language Models (SLMs) for edge inference. Bridging the gap between raw research and production-ready intelligent systems."
               icon={BrainCircuit}
-              color="bg-purple-500"
-              tags={["PyTorch", "Gemini", "LLMs"]}
+              number="02"
           />
-        </motion.div>
+          <ServiceRow 
+              title="Security & Auditing" 
+              desc="Implementing zero-trust architectures, automated compliance scanning, and forensic log analysis to harden applications against vulnerabilities."
+              icon={ShieldCheck}
+              number="03"
+          />
+          <ServiceRow 
+              title="Frontend Engineering" 
+              desc="Developing accessible, high-performance web applications with a focus on editorial design, fluid animations, and pixel-perfect responsiveness."
+              icon={Palette}
+              number="04"
+          />
+        </div>
       </motion.div>
     </Section>
   );
 };
 
-const ServiceCard = ({ title, desc, icon: Icon, color, tags }: any) => (
-    <motion.div 
-        variants={itemVariants}
-        className="group p-8 bg-white dark:bg-stone-900 rounded-3xl border border-zinc-100 dark:border-stone-800 shadow-sm hover:shadow-xl hover:-translate-y-2 dark:hover:border-stone-700 transition-all duration-300"
-    >
-        <motion.div 
-            variants={iconVariants}
-            className={`w-14 h-14 ${color} rounded-2xl flex items-center justify-center text-white mb-6 shadow-lg rotate-3 group-hover:rotate-6 transition-transform`}
-        >
-            <Icon className="w-7 h-7" />
-        </motion.div>
-        <h3 className="font-display font-bold text-2xl mb-3 text-zinc-900 dark:text-stone-100">{title}</h3>
-        <p className="text-zinc-500 dark:text-stone-400 leading-relaxed mb-6">{desc}</p>
-        <div className="flex flex-wrap gap-2">
-            {tags.map((t: string) => (
-                <span key={t} className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-stone-500 bg-zinc-50 dark:bg-stone-800 px-2 py-1 rounded-md">
-                    {t}
-                </span>
-            ))}
+const ServiceRow = ({ title, desc, icon: Icon, number }: any) => (
+    <div className="group relative flex flex-col md:flex-row justify-between items-start md:items-center py-12 md:py-16 border-b border-zinc-300 dark:border-stone-800 hover:bg-white dark:hover:bg-stone-900 transition-colors duration-500 px-6 -mx-6 md:mx-0 md:px-8 cursor-default">
+        
+        <div className="flex items-center gap-8 mb-6 md:mb-0 w-full md:w-1/3">
+            <span className="font-sans text-xs tracking-widest text-zinc-400 dark:text-stone-600 uppercase">
+                [ {number} ]
+            </span>
+            <div className="hidden md:flex items-center justify-center w-12 h-12 border border-zinc-300 dark:border-stone-700 rounded-full group-hover:scale-110 transition-transform duration-500">
+                <Icon className="w-5 h-5 text-zinc-900 dark:text-stone-100" strokeWidth={1.5} />
+            </div>
+            <h3 className="font-display font-medium text-3xl text-zinc-950 dark:text-stone-50 group-hover:pl-2 transition-all duration-500">
+                {title}
+            </h3>
         </div>
-    </motion.div>
+
+        <div className="w-full md:w-1/2 flex items-center justify-between">
+            <p className="text-zinc-600 dark:text-stone-400 font-sans font-light leading-relaxed text-lg max-w-lg">
+                {desc}
+            </p>
+            <div className="hidden lg:block overflow-hidden">
+                <motion.div 
+                    className="flex flex-col gap-10 translate-y-10 group-hover:translate-y-0 transition-transform duration-500"
+                >
+                    <Icon className="w-8 h-8 text-zinc-300 dark:text-stone-700" strokeWidth={1} />
+                    <Icon className="w-8 h-8 text-zinc-900 dark:text-stone-100" strokeWidth={1} />
+                </motion.div>
+            </div>
+        </div>
+    </div>
 );

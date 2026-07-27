@@ -12,7 +12,6 @@ import { Footer } from './components/Footer';
 import { AmbientBackground } from './components/ui/AmbientBackground';
 import Grain from './components/ui/Grain';
 import Cursor from './components/ui/Cursor';
-import GradientFollower from './components/ui/GradientFollower';
 import { ScrollToTopButton } from './components/ui/ScrollToTopButton';
 import { SelectionHighlighter } from './components/ui/SelectionHighlighter';
 import { ParallaxSection } from './components/ui/ParallaxSection';
@@ -27,26 +26,25 @@ function AppContent() {
 
   return (
     <div 
-      className="w-full min-h-screen antialiased selection:bg-orange-100 selection:text-orange-900 dark:selection:bg-orange-900 dark:selection:text-orange-100 relative transition-colors duration-500 cursor-none"
+      className="w-full min-h-screen antialiased selection:bg-zinc-900 selection:text-white dark:selection:bg-white dark:selection:text-zinc-900 relative transition-colors duration-500 cursor-none"
       onMouseUp={stopSelecting}
       onMouseMove={updateSelection}
     >
       <AmbientBackground />
-      <GradientFollower />
       <Grain />
       <Cursor />
       <ScrollToTopButton />
       <SelectionHighlighter />
       
-      {/* Content Wrapper to sit above the fixed background */}
-      <div className="relative z-10 w-full flex flex-col">
+      {/* Content Wrapper */}
+      <div className="relative z-10 w-full flex flex-col bg-[#F4F3EF] dark:bg-[#0A0A0A]">
         <Navbar />
-        <ParallaxSection speed={-0.1}>
+        <ParallaxSection speed={-0.05}>
           <div id="top">
             <Hero />
           </div>
         </ParallaxSection>
-        <ParallaxSection speed={0.05}>
+        <ParallaxSection speed={0.02}>
           <Services />
         </ParallaxSection>
         <ParallaxSection speed={0.02}>

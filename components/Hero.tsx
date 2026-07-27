@@ -1,41 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { PERSONAL_INFO, HERO_VARIANTS } from '../constants';
-import { ArrowDown, Github, Linkedin, BrainCircuit } from 'lucide-react';
+import React from 'react';
+import { motion } from 'framer-motion';
+import { PERSONAL_INFO } from '../constants';
+import { ArrowDown, Github, Linkedin, MapPin, Briefcase } from 'lucide-react';
 import { Selectable } from './ui/Selectable';
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-      duration: 0.5,
-      ease: 'easeOut'
-    },
-  },
+const transition = { duration: 1.4, ease: [0.6, 0.01, 0.05, 0.9] };
+
+const titleAnimation = {
+  initial: { y: 100, opacity: 0 },
+  animate: { y: 0, opacity: 1 },
 };
 
-const itemVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, ease: 'easeOut' },
-  },
+const lineReveal = {
+  initial: { clipPath: 'inset(0% 100% 0% 0%)' },
+  animate: { clipPath: 'inset(0% 0% 0% 0%)' },
 };
-
 
 export const Hero: React.FC = () => {
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % HERO_VARIANTS.length);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, []);
-
   const scrollToProjects = () => {
     const element = document.getElementById('projects');
     if (element) {
@@ -45,102 +26,114 @@ export const Hero: React.FC = () => {
 
   return (
     <motion.div
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.1 }}
-        variants={containerVariants}
-        className="relative min-h-screen flex flex-col justify-center px-6 pt-20 overflow-hidden z-10"
+        initial="initial"
+        animate="animate"
+        className="relative min-h-screen flex flex-col justify-center px-6 md:px-12 lg:px-24 overflow-hidden z-10"
     >
-      
-      {/* Playful Background Elements */}
-      <motion.div 
-        animate={{ rotate: 360 }}
-        transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-        className="absolute top-20 right-[-100px] w-96 h-96 rounded-full border border-dashed border-orange-200 dark:border-orange-900/30 opacity-50 pointer-events-none"
-      />
-      <motion.div 
-        animate={{ y: [0, -20, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-40 left-10 w-32 h-32 bg-purple-100 dark:bg-purple-900/20 rounded-full blur-2xl opacity-60 pointer-events-none"
-      />
-      <div className="absolute top-1/3 right-1/4 w-4 h-4 bg-teal-400 rounded-full" />
-      <div className="absolute bottom-1/4 left-1/3 w-6 h-6 bg-orange-400 rounded-md rotate-12" />
-
-      <div className="max-w-7xl mx-auto w-full z-10">
-        <motion.div variants={itemVariants} className="max-w-4xl">
-          <div
-            className="flex items-center gap-3 mb-6"
-          >
-            <span className="px-4 py-1.5 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 font-bold text-sm tracking-wide">
-              HELLO WORLD
-            </span>
-            <span className="h-px w-20 bg-orange-200 dark:bg-orange-800/50"></span>
-          </div>
-
-          {/* Cycling Headline */}
-          <div className="h-48 md:h-40 mb-6 relative">
-            <AnimatePresence mode="wait">
-              <motion.h1
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-                className="font-display font-extrabold text-5xl md:text-7xl lg:text-8xl text-zinc-900 dark:text-stone-100 leading-[0.95] tracking-tight absolute top-0 left-0"
-              >
-                <Selectable>{HERO_VARIANTS[index].headline}</Selectable>
-              </motion.h1>
-            </AnimatePresence>
-          </div>
-          <Selectable>
-            <motion.p
-              key={`sub-${index}`}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.5 }}
-              className="text-lg md:text-2xl text-zinc-600 dark:text-stone-400 max-w-2xl leading-relaxed mb-10 font-medium"
-            >
-              Hi, I'm <strong className="text-zinc-900 dark:text-stone-200">{PERSONAL_INFO.name}</strong>. {HERO_VARIANTS[index].subline}
-            </motion.p>
-          </Selectable>
-
-          <div
-            className="flex flex-col sm:flex-row gap-5 items-start sm:items-center"
-          >
-            <button 
-              onClick={scrollToProjects}
-              className="px-8 py-4 bg-zinc-900 dark:bg-white text-white dark:text-stone-900 font-bold rounded-xl hover:bg-zinc-800 dark:hover:bg-zinc-200 transition-all hover:shadow-lg hover:shadow-zinc-900/20 active:scale-95 cursor-pointer"
-            >
-              See My Work
-            </button>
-            
-            <div className="flex gap-4 items-center pl-2">
-               <SocialLink href={PERSONAL_INFO.github} icon={Github} />
-               <SocialLink href={PERSONAL_INFO.linkedin} icon={Linkedin} />
-               <SocialLink href={PERSONAL_INFO.huggingface} icon={BrainCircuit} />
+      <div className="w-full max-w-7xl mx-auto flex flex-col items-start z-10">
+        
+        {/* Availability Badge */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, ...transition }}
+          className="flex items-center gap-4 mb-8 sm:mb-12 border-l border-zinc-300 dark:border-stone-800 pl-4 py-1"
+        >
+            <div className="flex items-center gap-2 text-zinc-500 dark:text-stone-400 font-sans text-xs tracking-widest uppercase">
+              <div className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-zinc-800 dark:bg-stone-300 opacity-30"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-zinc-900 dark:bg-stone-100"></span>
+              </div>
+              Accepting Roles
             </div>
-          </div>
+            <div className="h-3 w-px bg-zinc-300 dark:bg-stone-800"></div>
+            <div className="flex items-center gap-1.5 text-zinc-500 dark:text-stone-400 font-sans text-xs tracking-widest uppercase">
+              <MapPin className="w-3.5 h-3.5" />
+              Kolkata
+            </div>
         </motion.div>
+
+        {/* Huge Typographic Title */}
+        <div className="overflow-hidden mb-2">
+            <Selectable>
+              <motion.h1 
+                variants={titleAnimation}
+                transition={{ delay: 0.1, ...transition }}
+                className="font-display text-[4.5rem] md:text-[7rem] lg:text-[9rem] leading-[0.85] tracking-[-0.03em] text-zinc-950 dark:text-stone-50 font-medium"
+              >
+                Software
+              </motion.h1>
+            </Selectable>
+        </div>
+        <div className="overflow-hidden mb-8 md:mb-16">
+            <Selectable>
+              <motion.h1 
+                variants={titleAnimation}
+                transition={{ delay: 0.2, ...transition }}
+                className="font-display text-[4.5rem] md:text-[7rem] lg:text-[9rem] leading-[0.85] tracking-[-0.03em] text-zinc-950 dark:text-stone-50 font-medium italic pr-4"
+              >
+                Engineer.
+              </motion.h1>
+            </Selectable>
+        </div>
+
+        {/* Divider Line */}
+        <motion.div 
+            variants={lineReveal}
+            transition={{ delay: 0.6, ...transition }}
+            className="w-full h-px bg-zinc-300 dark:bg-stone-800 mb-8 md:mb-12 max-w-4xl"
+        />
+
+        {/* Bio & CTA */}
+        <div className="flex flex-col md:flex-row gap-8 md:gap-16 w-full max-w-4xl justify-between items-start md:items-end">
+            <motion.div 
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.7, ...transition }}
+                className="max-w-md font-sans text-lg md:text-xl text-zinc-600 dark:text-stone-400 leading-relaxed font-light"
+            >
+                <Selectable>
+                  I'm <strong className="text-zinc-900 dark:text-stone-200 font-medium">{PERSONAL_INFO.name}</strong>. I specialize in designing robust backend systems, scalable frontends, and fine-tuning specialized ML models to build seamless, high-performance applications.
+                </Selectable>
+            </motion.div>
+
+            <motion.div 
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.8, ...transition }}
+                className="flex gap-4 items-center"
+            >
+                <button 
+                  onClick={scrollToProjects}
+                  className="group relative flex items-center gap-3 px-6 py-4 bg-transparent border border-zinc-900 dark:border-stone-100 text-zinc-900 dark:text-stone-100 font-sans font-medium text-sm tracking-wide uppercase overflow-hidden transition-colors hover:text-white dark:hover:text-zinc-900 cursor-pointer"
+                >
+                  <span className="relative z-10 flex items-center gap-2">
+                    View Archive <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />
+                  </span>
+                  <div className="absolute inset-0 h-full w-0 bg-zinc-900 dark:bg-stone-100 transition-all duration-500 ease-out group-hover:w-full z-0"></div>
+                </button>
+
+                <div className="flex gap-2">
+                   <SocialLink href={PERSONAL_INFO.github} icon={Github} delay={0.9} />
+                   <SocialLink href={PERSONAL_INFO.linkedin} icon={Linkedin} delay={1.0} />
+                </div>
+            </motion.div>
+        </div>
       </div>
-      
-      <motion.div 
-        variants={itemVariants}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-zinc-400 dark:text-stone-600"
-      >
-        <span className="text-xs font-bold tracking-widest uppercase">Scroll</span>
-        <ArrowDown className="w-4 h-4 animate-bounce" />
-      </motion.div>
     </motion.div>
   );
 };
 
-const SocialLink = ({ href, icon: Icon }: { href: string, icon: any }) => (
-  <a 
+const SocialLink = ({ href, icon: Icon, delay }: { href: string, icon: any, delay: number }) => (
+  <motion.a 
+    initial={{ opacity: 0, scale: 0.8 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ delay, duration: 0.8, ease: [0.6, 0.01, 0.05, 0.9] }}
     href={href} 
     target="_blank" 
     rel="noopener noreferrer"
-    className="p-3 bg-white dark:bg-stone-800 border border-zinc-200 dark:border-stone-700 rounded-full text-zinc-600 dark:text-stone-400 hover:text-zinc-900 dark:hover:text-white hover:border-zinc-400 dark:hover:border-stone-500 hover:scale-110 transition-all duration-300"
+    className="p-4 bg-transparent border border-zinc-300 dark:border-stone-800 text-zinc-600 dark:text-stone-400 hover:text-zinc-900 dark:hover:text-stone-100 hover:border-zinc-900 dark:hover:border-stone-100 transition-all duration-500"
   >
-    <Icon className="w-5 h-5" />
-  </a>
+    <Icon className="w-4 h-4" />
+  </motion.a>
 );

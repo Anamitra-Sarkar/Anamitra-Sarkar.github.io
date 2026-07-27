@@ -151,7 +151,7 @@ export const AmbientBackground: React.FC = () => {
   }, [theme]); // Rerun effect if theme changes
 
   return (
-    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-warm-50 dark:bg-stone-950 transition-colors duration-500">
+    <div className="fixed inset-0 z-0 pointer-events-none overflow-hidden bg-[#F4F3EF] dark:bg-[#0A0A0A] transition-colors duration-500">
         <canvas 
             ref={canvasRef} 
             className="block w-full h-full"
@@ -159,4 +159,5 @@ export const AmbientBackground: React.FC = () => {
         />
     </div>
   );
+};
 };

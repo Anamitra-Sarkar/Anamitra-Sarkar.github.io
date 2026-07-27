@@ -9,16 +9,16 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
-        display: ['Outfit', 'sans-serif'],
+        display: ['Playfair Display', 'serif'],
       },
       colors: {
         warm: {
-          50: '#FFFCF8',
-          100: '#FDF6E3',
+          50: '#F4F3EF', // Elegant paper cream
+          100: '#EBE9E1',
         },
         stone: {
-          850: '#1f1c1a', // Custom soothing dark
-          950: '#0c0a09',
+          850: '#1a1a1a', 
+          950: '#0A0A0A', // Ink black
         },
         accent: {
           purple: '#8B5CF6',
