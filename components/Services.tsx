@@ -26,7 +26,7 @@ export const Services: React.FC = () => {
         <div className="flex flex-col border-t border-zinc-300 dark:border-stone-800">
           <ServiceRow 
               title="Systems & DevOps" 
-              desc="Designing scalable cloud infrastructure, CI/CD pipelines, and secure server environments. From Kubernetes orchestration to Linux kernel customization."
+              desc="Designing scalable cloud infrastructure, CI/CD pipelines, and secure server environments with a focus on performance and reliability."
               icon={Server}
               number="01"
           />
