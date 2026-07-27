@@ -59,9 +59,9 @@ export const Hero: React.FC = () => {
               <motion.h1 
                 variants={titleAnimation}
                 transition={{ delay: 0.1, ...transition }}
-                className="font-display text-[4.5rem] md:text-[7rem] lg:text-[9rem] leading-[0.85] tracking-[-0.03em] text-zinc-950 dark:text-stone-50 font-medium"
+                className="font-display text-[4.5rem] md:text-[7rem] lg:text-[9rem] leading-[1.1] tracking-[-0.03em] text-zinc-950 dark:text-stone-50 font-medium"
               >
-                Software
+                AI/ML
               </motion.h1>
             </Selectable>
         </div>
@@ -70,7 +70,7 @@ export const Hero: React.FC = () => {
               <motion.h1 
                 variants={titleAnimation}
                 transition={{ delay: 0.2, ...transition }}
-                className="font-display text-[4.5rem] md:text-[7rem] lg:text-[9rem] leading-[0.85] tracking-[-0.03em] text-zinc-950 dark:text-stone-50 font-medium italic pr-4"
+                className="font-display text-[4.5rem] md:text-[7rem] lg:text-[9rem] leading-[1.1] tracking-[-0.03em] text-zinc-950 dark:text-stone-50 font-medium italic pr-4"
               >
                 Engineer.
               </motion.h1>
