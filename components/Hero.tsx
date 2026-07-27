@@ -65,7 +65,7 @@ export const Hero: React.FC = () => {
               </motion.h1>
             </Selectable>
         </div>
-        <div className="overflow-hidden mb-8 md:mb-16">
+        <div className="overflow-hidden mb-8 md:mb-16 pb-3">
             <Selectable>
               <motion.h1 
                 variants={titleAnimation}

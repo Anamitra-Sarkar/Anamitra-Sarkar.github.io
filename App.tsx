@@ -37,7 +37,7 @@ function AppContent() {
       <SelectionHighlighter />
       
       {/* Content Wrapper */}
-      <div className="relative z-10 w-full flex flex-col bg-[#F4F3EF] dark:bg-[#0A0A0A]">
+      <div className="relative z-10 w-full flex flex-col">
         <Navbar />
         <ParallaxSection speed={-0.05}>
           <div id="top">
